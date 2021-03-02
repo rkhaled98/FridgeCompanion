@@ -19,6 +19,7 @@ public class Food {
     private String id;
     private String image;
     private double calories;
+    private String foodDescription;
 
 
 
@@ -33,6 +34,14 @@ public class Food {
         foodName = "";
         enteredDate = Calendar.getInstance().getTimeInMillis();
         expireDate = 0;
+    }
+
+    public String getFoodDescription() {
+        return foodDescription;
+    }
+
+    public void setFoodDescription(String foodDescription) {
+        this.foodDescription = foodDescription;
     }
 
     //getter and setter
