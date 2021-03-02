@@ -30,6 +30,21 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         this.resourceLayout = resource;
     }
 
+    @Override
+    public int getCount() {
+        return foods.size();
+    }
+
+    @Override
+    public Food getItem(int i) {
+        return foods.get(i);
+    }
+//
+//    @Override
+//    public long getItemId(int i) {
+//        return i;
+//    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {

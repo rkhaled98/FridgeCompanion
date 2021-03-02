@@ -9,29 +9,23 @@
     android:paddingHorizontal="20dp"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_add_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add fridge item" />
-
     <TextView
-        android:id="@+id/welcome_text"
+        android:id="@+id/textFridgeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_text_placeholder"
+        android:text="Fridge"
         android:layout_marginVertical="20dp"
         android:textSize="30sp"
         />
-    <ListView
-        android:id="@+id/fridgelistview"
+    <LinearLayout
+        android:id="@+id/linearLayoutFood"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:numColumns="1"
         android:verticalSpacing="20dp"
-        android:layout_below="@id/welcome_text"
+        android:layout_below="@id/textFridgeName"
         android:layout_centerHorizontal="true"
         android:scrollbars="none"
         android:layout_marginBottom="10dp"
-        />
+        android:orientation="vertical" />
 </LinearLayout>

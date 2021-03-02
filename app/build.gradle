@@ -46,12 +46,23 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:3.2.0'
     implementation 'me.dm7.barcodescanner:zxing:1.9'
-//    implementation platform('com.google.firebase:firebase-bom:26.5.0')
-//    implementation 'com.google.firebase:firebase-database:19.6.0'
-//    implementation 'com.google.firebase:firebase-auth:20.0.2'
+    implementation platform('com.google.firebase:firebase-bom:26.5.0')
+    implementation 'com.google.firebase:firebase-database:19.6.0'
+    implementation 'com.google.firebase:firebase-auth:20.0.2'
 
-    compile 'com.google.firebase:firebase-database:11.8.0'
-    compile 'com.google.firebase:firebase-auth:11.8.0'
+    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
+
+    // FirebaseUI for Cloud Firestore
+    implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
+
+    // FirebaseUI for Firebase Auth
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+
+    // FirebaseUI for Cloud Storage
+    implementation 'com.firebaseui:firebase-ui-storage:7.1.1'
+
+//    compile 'com.google.firebase:firebase-database:11.8.0'
+//    compile 'com.google.firebase:firebase-auth:11.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -97,4 +97,19 @@ public class Food {
     public void setImage(String image){this.image = image;}
 
     public void setCalories(double calories){this.calories = calories;}
+
+    @Override
+    public String toString() {
+        return "Food{" +
+                "quantity=" + quantity +
+                ", unit=" + unit +
+                ", foodName='" + foodName + '\'' +
+                ", enteredDate=" + enteredDate +
+                ", expireDate=" + expireDate +
+                ", id='" + id + '\'' +
+                ", image='" + image + '\'' +
+                ", calories=" + calories +
+                ", foodDescription='" + foodDescription + '\'' +
+                '}';
+    }
 }
