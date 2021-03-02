@@ -6,4 +6,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="setting">Setting</string>
     <string name="history">History</string>
+    <string name="image_content_des">Food Image</string>
+    <string name="welcome_text_placeholder">Welcome, UserName!</string>
 </resources>
