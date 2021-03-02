@@ -28,7 +28,7 @@ public class Food {
         this.setDefaultValues();
     }
 
-    private void setDefaultValues(){
+    private void setDefaultValues() {
         quantity = 0;
         unit = UNIT_COUNT;
         foodName = "";
