@@ -1,5 +1,6 @@
 package com.fridgecompanion;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -26,14 +27,18 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_history, R.id.navigation_setting)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        //.setAction("Action", null).show();
+
+                Intent intent = new Intent(getApplicationContext(),BarcodeScanner.class);
+                startActivity(intent);
             }
         });
     }
