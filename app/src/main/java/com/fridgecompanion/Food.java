@@ -15,7 +15,15 @@ public class Food {
     private String foodName;
     private long enteredDate;
     private long expireDate;
+    private String foodDescription;
 
+    public String getFoodDescription() {
+        return foodDescription;
+    }
+
+    public void setFoodDescription(String foodDescription) {
+        this.foodDescription = foodDescription;
+    }
 
     public Food() {
         this.setDefaultValues();
