@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +21,10 @@ import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.fridgecompanion.FirebaseDatasource;
 import com.fridgecompanion.Food;
+import com.fridgecompanion.Fridge;
+import com.fridgecompanion.Item;
 import com.fridgecompanion.R;
 
 import java.util.ArrayList;
@@ -31,12 +35,36 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FoodAdapter adapter;
     private GridView lv;
-
+    FirebaseDatasource firebaseDatasource;
+    private String TAG = "firebasehomefragment";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        final Button btnAddItem = root.findViewById(R.id.button_add_item);
+
+        try {
+            firebaseDatasource = new FirebaseDatasource();
+
+            btnAddItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "adding item");
+                    Item item = new Item("test name" , 544);
+                    firebaseDatasource.addItemToCurrentUser(item);
+                    Fridge fridge = new Fridge("test fridge");
+//                    firebaseDatasource.createFridge(fridge);
+
+//                    mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
+                }
+            });
+
+        } catch (Exception e) {
+
+        }
+
 
         return root;
     }

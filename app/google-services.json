@@ -1,33 +1,63 @@
 {
   "project_info": {
-    "project_number": "683884557899",
-    "project_id": "fridge-companion-d19fb",
-    "storage_bucket": "fridge-companion-d19fb.appspot.com"
+    "project_number": "758174227703",
+    "firebase_url": "https://fridge-companion-2-default-rtdb.firebaseio.com",
+    "project_id": "fridge-companion-2",
+    "storage_bucket": "fridge-companion-2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:683884557899:android:2c35c7e2dc22cf6b4dffce",
+        "mobilesdk_app_id": "1:758174227703:android:1e0b72e5799d83fa5907f2",
         "android_client_info": {
           "package_name": "com.fridgecompanion"
         }
       },
       "oauth_client": [
         {
-          "client_id": "683884557899-1ngcncmr0sqm96adije3u6fjq71ll06h.apps.googleusercontent.com",
+          "client_id": "758174227703-mlq4ircpv8pmc0sik75mlvmcdb4ev12r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB2SUXUx-0Fll_xVc41NGym7j2JRrbYppI"
+          "current_key": "AIzaSyAlyqvpWS-I2YWjLeq1SyWekGTCWGFoA24"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "683884557899-1ngcncmr0sqm96adije3u6fjq71ll06h.apps.googleusercontent.com",
+              "client_id": "758174227703-mlq4ircpv8pmc0sik75mlvmcdb4ev12r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758174227703:android:5dcf7974fdb359ad5907f2",
+        "android_client_info": {
+          "package_name": "com.varunmishra.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758174227703-mlq4ircpv8pmc0sik75mlvmcdb4ev12r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlyqvpWS-I2YWjLeq1SyWekGTCWGFoA24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758174227703-mlq4ircpv8pmc0sik75mlvmcdb4ev12r.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
