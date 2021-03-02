@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment"
     android:background="#F1F4F7"
-    android:paddingHorizontal="20dp">
+    android:paddingHorizontal="20dp"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/button_add_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add fridge item" />
 
     <TextView
         android:id="@+id/welcome_text"
@@ -27,4 +34,4 @@
         android:scrollbars="none"
         android:layout_marginBottom="10dp"
         />
-</RelativeLayout>
+</LinearLayout>
