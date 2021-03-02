@@ -1,6 +1,5 @@
 package com.fridgecompanion.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,22 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.fridgecompanion.FirebaseDatasource;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.Fridge;
-import com.fridgecompanion.Item;
 import com.fridgecompanion.R;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,27 +31,117 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private FoodAdapter adapter;
-    private GridView lv;
+    private FoodAdapter foodAdapter;
+    private ListView lv;
     FirebaseDatasource firebaseDatasource;
+    FirebaseListAdapter firebaseListAdapter;
     private String TAG = "firebasehomefragment";
+    private FridgeAdapter fridgeAdapter;
+    private List<Fridge> fridges;
+    private List<Food> foods;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        final Button btnAddItem = root.findViewById(R.id.button_add_item);
+        final Button btnAddItem = view.findViewById(R.id.button_add_item);
+
+        fridges = new ArrayList<Fridge>();
+
+        foods = new ArrayList<Food>();
+
+        foodAdapter = new FoodAdapter(getActivity(), R.layout.layout_food_item, foods);
+
+        fridgeAdapter = new FridgeAdapter(getActivity(), R.layout.layout_fridge_item, fridges);
 
         try {
-            firebaseDatasource = new FirebaseDatasource();
+            firebaseDatasource = new FirebaseDatasource(getContext());
+
+            firebaseDatasource.getItemsReference().addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    foods.add(snapshot.getValue(Food.class));
+                    foodAdapter.notifyDataSetChanged();
+
+//                    Fridge fridge = new Fridge();
+//
+//                    DataSnapshot items = snapshot.child("items");
+//                    Log.d(TAG, "before getting all items");
+//
+//                    for (DataSnapshot ds : items.getChildren()) {
+//                        Food food = ds.getValue(Food.class);
+//                        Log.d(TAG, food.toString());
+//                        fridge.addItem(food);
+//                    }
+//
+//
+//                    Log.d(TAG, "after getting all items");
+////                    fridgeAdapter.add(fridge);
+//                    fridges.add(fridge);
+//
+//                    fridgeAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    foods.add(snapshot.getValue(Food.class));
+                    foodAdapter.notifyDataSetChanged();
+//                    Fridge fridge = new Fridge();
+//
+//                    fridges.clear();
+//
+//                    DataSnapshot items = snapshot.child("items");
+//                    Log.d(TAG, "before getting all items");
+//
+//                    for (DataSnapshot ds : items.getChildren()) {
+//                        Food food = ds.getValue(Food.class);
+//                        Log.d(TAG, food.toString());
+//                        fridge.addItem(food);
+//                    }
+//
+//                    Log.d(TAG, "after getting all items");
+////                    fridgeAdapter.add(fridge);
+//                    fridges.add(fridge);
+//
+//                    fridgeAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+//            firebaseListAdapter = firebaseDatasource.getMyAdapter();
+//            firebaseListAdapter.startListening();
+//            lv.setAdapter(firebaseDatasource.getMyAdapter());
 
             btnAddItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "adding item");
-                    Item item = new Item("test name" , 544);
-                    firebaseDatasource.addItemToCurrentUser(item);
-                    Fridge fridge = new Fridge("test fridge");
+//                    Item item = new Item("test name" , 544);
+                    Food food = new Food();
+                    food.setFoodName("Beef Dish");
+                    firebaseDatasource.addItemToUser(food);
+//                    Fridge fridge = new Fridge("test fridge");
+//                    firebaseDatasource.createFridge(fridge);
+//                    Log.d(TAG, ""+firebaseListAdapter.getCount());
 //                    firebaseDatasource.createFridge(fridge);
 
 //                    mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
@@ -66,13 +153,18 @@ public class HomeFragment extends Fragment {
         }
 
 
-        return root;
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lv = (GridView)view.findViewById(R.id.gridview);
+
+
+
+        lv = (ListView) view.findViewById(R.id.fridgelistview);
+        lv.setAdapter(foodAdapter);
+
         lv.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -86,10 +178,16 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        DBReader dbreader = new DBReader();
-        dbreader.start();
+//        lv.setAdapter(firebaseDatasource.getMyAdapter());
+//        DBReader dbreader = new DBReader();
+//        dbreader.start();
     }
 
     class DBReader extends Thread{
