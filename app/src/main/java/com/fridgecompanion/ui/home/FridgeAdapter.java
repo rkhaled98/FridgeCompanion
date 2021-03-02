@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.Fridge;
 import com.fridgecompanion.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -73,10 +74,11 @@ public class FridgeAdapter extends ArrayAdapter<Fridge> {
             final ImageView foodImage = (ImageView) currView.findViewById(R.id.food_image);
             final TextView foodDate = (TextView) currView.findViewById(R.id.expire_date);
 
+
+
             foodName.setText(food.getFoodName());
             foodDes.setText(food.getFoodDescription());
             foodDate.setText("Expired");
-            foodImage.setImageResource(R.drawable.beef);
 
             linearLayout.addView(view);
         }

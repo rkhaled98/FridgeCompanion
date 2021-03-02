@@ -48,19 +48,19 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 item = EdamamService.processResults(response);
-
                 try {
                     FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
                     Food food = new Food();
                     food.setFoodName(item.getFoodName());
                     food.setCalories(item.getCalories());
+                    food.setImage(item.getImage());
                     firebaseDatasource.addItemToUser(food);
-                    Log.d("check","added" + item.getFoodName());
+                    Log.d("check","added" + item.getFoodName() + item.getImage());
+                    Log.d("check",item.getId());
+                    Log.d("check",item.getFoodName());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Log.d("check",item.getId());
-                Log.d("check",item.getFoodName());
                 finish();
             }
         });
