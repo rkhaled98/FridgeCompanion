@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.fridgecompanion.Food;
 import com.fridgecompanion.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -58,10 +59,17 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         final ImageView foodImage = (ImageView) view.findViewById(R.id.food_image);
         final TextView foodDate = (TextView) view.findViewById(R.id.expire_date);
 
+        if (!food.getImage().isEmpty()) {
+            Picasso.get().load(food.getImage()).into(foodImage);
+        } else {
+            foodImage.setImageResource(R.drawable.beef);
+        }
+
+
         foodName.setText(food.getFoodName());
         foodDes.setText(food.getFoodDescription());
         foodDate.setText("Expired");
-        foodImage.setImageResource(R.drawable.beef);
+//        foodImage.setImageResource(R.drawable.beef);
 
         return view;
     }
