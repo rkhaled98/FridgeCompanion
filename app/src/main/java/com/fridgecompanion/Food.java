@@ -15,15 +15,13 @@ public class Food {
     private String foodName;
     private long enteredDate;
     private long expireDate;
-    private String foodDescription;
+    //Food ID, image url, and calories from database
+    private String id;
+    private String image;
+    private double calories;
 
-    public String getFoodDescription() {
-        return foodDescription;
-    }
 
-    public void setFoodDescription(String foodDescription) {
-        this.foodDescription = foodDescription;
-    }
+
 
     public Food() {
         this.setDefaultValues();
@@ -38,6 +36,13 @@ public class Food {
     }
 
     //getter and setter
+    public String getId(){return this.id;}
+
+    public String getImage(){return this.image;}
+
+    public double getCalories(){return this.calories;}
+
+
     public int getQuantity() {
         return quantity;
     }
@@ -77,4 +82,10 @@ public class Food {
     public void setExpireDate(long expireDate) {
         this.expireDate = expireDate;
     }
+
+    public void setId(String id){this.id = id;}
+
+    public void setImage(String image){this.image = image;}
+
+    public void setCalories(double calories){this.calories = calories;}
 }
