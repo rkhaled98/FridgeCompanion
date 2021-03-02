@@ -1,5 +1,6 @@
 package com.fridgecompanion.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +20,7 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.fridgecompanion.FirebaseDatasource;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.Fridge;
+import com.fridgecompanion.ItemViewActivity;
 import com.fridgecompanion.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -138,6 +140,7 @@ public class HomeFragment extends Fragment {
 //                    Item item = new Item("test name" , 544);
                     Food food = new Food();
                     food.setFoodName("Beef Dish");
+                    food.setFoodDescription("Delicious Beef for tomorrow");
                     firebaseDatasource.addItemToUser(food);
 //                    Fridge fridge = new Fridge("test fridge");
 //                    firebaseDatasource.createFridge(fridge);
@@ -169,7 +172,8 @@ public class HomeFragment extends Fragment {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        Log.d("sjlee", "Clicked Item");
+                        Intent intent = new Intent(getContext(), ItemViewActivity.class);
+                        startActivity(intent);
                     }
                 }
         );
