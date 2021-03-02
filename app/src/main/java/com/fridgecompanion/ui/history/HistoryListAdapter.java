@@ -10,7 +10,10 @@ import android.widget.TextView;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class HistoryListAdapter extends BaseAdapter {
 
@@ -53,7 +56,8 @@ public class HistoryListAdapter extends BaseAdapter {
 
         // Load the text into the text view
         String foodName = foodList.get(position).getFoodName();
-        String date = String.valueOf(foodList.get(position).getEnteredDate());
+        long millisecond = foodList.get(position).getEnteredDate();
+        String date = new SimpleDateFormat("MM/dd/yyy").format(new Date(millisecond));
         firstRow.setText("User added " + foodName + " to fridge. " + date);
 
         return view;

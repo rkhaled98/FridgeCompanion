@@ -2,6 +2,7 @@ package com.fridgecompanion.ui.history;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,12 +22,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.fridgecompanion.Food;
+import com.fridgecompanion.FridgeNotifications;
 import com.fridgecompanion.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements View.OnClickListener {
 
     private HistoryViewModel historyViewModel;
     private ArrayList<Food> foodList;
@@ -33,12 +36,13 @@ public class HistoryFragment extends Fragment {
     private ListView listView;
     private Calendar DateAndTime;
     private String[] foodNames = new String[]{"apple", "orange", "chocolate"};
+    private final String TAG = "HistoryFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         foodList = new ArrayList<Food>(3);
-        // TODO: update for show and tell 3
+        // TODO: update based on cloud data
         for (int i = 0; i < foodNames.length; i++) {
             Food food = new Food();
             food.setFoodName(foodNames[i]);
@@ -57,7 +61,26 @@ public class HistoryFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.history_list);
         context = view.getContext();
         updateHistory();
+
+        // SHow and tell 2
+        Button bt1 = (Button) view.findViewById(R.id.id_inv_low);
+        bt1.setOnClickListener(this);
+        Button bt2 = (Button) view.findViewById(R.id.id_exp_soon);
+        bt2.setOnClickListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.id_inv_low) {
+            FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_INVENTORY_LOW);
+            Toast.makeText(context, "inventory notification sent", Toast.LENGTH_SHORT).show();
+        }
+        else if (v.getId() == R.id.id_exp_soon) {
+            FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON);
+            Toast.makeText(context, "expiration notification sent", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -118,5 +141,11 @@ public class HistoryFragment extends Fragment {
                 }
             });
         }).start();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FridgeNotifications.cancelNotification();
     }
 }
