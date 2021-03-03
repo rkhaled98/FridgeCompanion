@@ -70,14 +70,14 @@ public class FridgeAdapter extends ArrayAdapter<Fridge> {
             View currView = layoutInflater.inflate(R.layout.layout_food_item, null);
 
             final TextView foodName = (TextView) currView.findViewById(R.id.food_title);
-            final TextView foodDes = (TextView) currView.findViewById(R.id.food_description);
+            //final TextView foodDes = (TextView) currView.findViewById(R.id.food_description);
             final ImageView foodImage = (ImageView) currView.findViewById(R.id.food_image);
             final TextView foodDate = (TextView) currView.findViewById(R.id.expire_date);
 
 
 
             foodName.setText(food.getFoodName());
-            foodDes.setText(food.getFoodDescription());
+            //foodDes.setText(food.getFoodDescription());
             foodDate.setText("Expired");
 
             linearLayout.addView(view);

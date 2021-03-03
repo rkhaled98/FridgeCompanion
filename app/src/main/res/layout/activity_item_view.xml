@@ -44,6 +44,7 @@
             android:contentDescription="@string/trash_button_image_des" />
     </androidx.cardview.widget.CardView>
 
+
     <TextView
         android:id="@+id/food_item_title"
         android:layout_width="match_parent"
@@ -69,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
+                android:id="@+id/food_item_image"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
