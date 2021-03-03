@@ -79,9 +79,11 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     foods.add(snapshot.getValue(Food.class));
-                    foodAdapter.notifyDataSetChanged();
-                    foodAdapter2.notifyDataSetChanged();
-
+                    if (gv.getVisibility() == GridView.GONE){
+                        foodAdapter.notifyDataSetChanged();
+                    }else {
+                        foodAdapter2.notifyDataSetChanged();
+                    }
 //                    Fridge fridge = new Fridge();
 //
 //                    DataSnapshot items = snapshot.child("items");
@@ -104,8 +106,11 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     foods.add(snapshot.getValue(Food.class));
-                    foodAdapter.notifyDataSetChanged();
-                    foodAdapter2.notifyDataSetChanged();
+                    if (gv.getVisibility() == GridView.GONE){
+                        foodAdapter.notifyDataSetChanged();
+                    }else {
+                        foodAdapter2.notifyDataSetChanged();
+                    }
 //                    Fridge fridge = new Fridge();
 //
 //                    fridges.clear();
