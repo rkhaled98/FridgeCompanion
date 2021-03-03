@@ -1,159 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F4F7"
-    tools:context=".ItemViewActivity"
-    android:paddingTop="30dp">
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        android:elevation="20dp"
-        android:layout_marginStart="20dp"
-        android:id="@+id/back_button_container">
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding = "15dp"
-            android:scaleType="fitXY"
-            android:src = "@drawable/ic_baseline_arrow_back_ios_new_24"
-            android:background="#FFFFFF"
-            android:onClick="onClickBack"
-            android:contentDescription="@string/back_button_image_des" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        android:layout_alignParentEnd="true"
-        android:elevation="20dp"
-        android:layout_marginEnd="20dp"
-        android:id="@+id/trash_button_container">
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding = "13dp"
-            android:scaleType="fitXY"
-            android:src = "@drawable/ic_baseline_delete_24"
-            android:background="#FFFFFF"
-            android:contentDescription="@string/trash_button_image_des" />
-    </androidx.cardview.widget.CardView>
-
-
-    <TextView
-        android:id="@+id/food_item_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="@string/food_text_placeholder"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:layout_below="@id/trash_button_container"/>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginVertical="10dp"
-        android:layout_below="@id/food_item_title"
-        android:id="@+id/food_image_container">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/food_item_image"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="1:1"
-                android:scaleType="fitXY"
-                android:src = "@drawable/beef"
-                android:contentDescription="@string/food_image_des" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
+    android:scrollbars="none">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/food_image_container"
-        android:background="@drawable/top_rounded"
-        android:layout_marginTop = "20dp"
-        android:padding= "20dp">
+        android:background="#F1F4F7"
+        tools:context=".ItemViewActivity"
+        android:paddingTop="30dp">
 
-
-        <ImageView
-            android:layout_marginStart="50dp"
-            android:id="@+id/time_icon"
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:src = "@drawable/ic_baseline_access_time_24"/>
-        <TextView
-            android:id="@+id/expire_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/time_icon"
-            android:text = "Expired"
-            android:padding="3dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            />
+            app:cardCornerRadius="12dp"
+            android:elevation="20dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/back_button_container">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding = "15dp"
+                android:scaleType="fitXY"
+                android:src = "@drawable/ic_baseline_arrow_back_ios_new_24"
+                android:background="#FFFFFF"
+                android:onClick="onClickBack"
+                android:contentDescription="@string/back_button_image_des" />
+        </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/amount_left"
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
             android:layout_alignParentEnd="true"
-            android:text = "3 Left"
-            android:padding="3dp"
-            android:textColor="#000000"
-            android:textSize="20sp"
+            android:elevation="20dp"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/trash_button_container">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding = "13dp"
+                android:scaleType="fitXY"
+                android:src = "@drawable/ic_baseline_delete_24"
+                android:background="#FFFFFF"
+                android:contentDescription="@string/trash_button_image_des" />
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/food_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/food_text_placeholder"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:textStyle="bold"
-            android:layout_marginEnd="50dp"
-            />
+            android:textSize="30sp"
+            android:layout_below="@id/trash_button_container"/>
 
-        <TextView
-            android:id="@+id/food_description"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/time_icon"
-            android:text="Delicious Beef for tomorrow"
-            android:layout_marginVertical="15dp"
-            android:layout_marginStart="20dp"
-            android:textSize="18sp"
-            android:textColor="#808080" />
-
-
-        <TextView
-            android:id="@+id/food_calories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/food_description"
-            android:text="Calories: 100"
+            app:cardCornerRadius="20dp"
+            android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="10dp"
-            android:layout_marginStart="20dp"
-            android:textSize="18sp"
-            android:textColor="#808080" />
+            android:layout_below="@id/food_item_title"
+            android:id="@+id/food_image_container">
 
-        <Button
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/food_item_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:scaleType="fitXY"
+                    android:src = "@drawable/beef"
+                    android:contentDescription="@string/food_image_des" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/food_calories"
-            android:text="Edit" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/food_image_container"
+            android:background="@drawable/top_rounded"
+            android:layout_marginTop = "20dp"
+            android:padding= "20dp">
+
+
+            <ImageView
+                android:layout_marginStart="50dp"
+                android:id="@+id/time_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:src = "@drawable/ic_baseline_access_time_24"/>
+            <TextView
+                android:id="@+id/expire_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/time_icon"
+                android:text = "Expired"
+                android:padding="3dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/amount_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text = "3 Left"
+                android:padding="3dp"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="50dp"
+                />
+
+            <TextView
+                android:id="@+id/food_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time_icon"
+                android:text="Delicious Beef for tomorrow"
+                android:layout_marginVertical="15dp"
+                android:layout_marginStart="20dp"
+                android:textSize="18sp"
+                android:textColor="#808080" />
+
+
+            <TextView
+                android:id="@+id/food_calories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/food_description"
+                android:text="Calories: 100"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="20dp"
+                android:textSize="18sp"
+                android:textColor="#808080" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/food_calories"
+                android:text="Edit" />
+
+        </RelativeLayout>
+
+
 
     </RelativeLayout>
-
-
-
-</RelativeLayout>
+</ScrollView>
