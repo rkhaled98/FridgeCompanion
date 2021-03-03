@@ -19,16 +19,20 @@ import androidx.annotation.Nullable;
 
 public class FoodAdapter extends ArrayAdapter<Food> {
 
+    public static int LIST_MODE = 0;
+    public static int GALLERY_MODE = 1;
     private final Context mContext;
     List<Food> foods;
     private int resourceLayout;
+    private int viewMode;
 
 
-    public FoodAdapter(@NonNull Context context, int resource, @NonNull List<Food> objects) {
+    public FoodAdapter(@NonNull Context context, int resource, @NonNull List<Food> objects, int viewMode) {
         super(context, resource, objects);
         this.mContext = context;
         this.foods = objects;
         this.resourceLayout = resource;
+        this.viewMode = viewMode;
     }
 
     @Override
@@ -54,23 +58,23 @@ public class FoodAdapter extends ArrayAdapter<Food> {
             final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             view = layoutInflater.inflate(resourceLayout, null);
         }
-        final TextView foodName = (TextView) view.findViewById(R.id.food_title);
-        final TextView foodDes = (TextView) view.findViewById(R.id.food_description);
+
         final ImageView foodImage = (ImageView) view.findViewById(R.id.food_image);
-        final TextView foodDate = (TextView) view.findViewById(R.id.expire_date);
 
         if (!food.getImage().isEmpty()) {
             Picasso.get().load(food.getImage()).into(foodImage);
-        } else {
+        }else{
             foodImage.setImageResource(R.drawable.beef);
         }
 
-
-        foodName.setText(food.getFoodName());
-        foodDes.setText(food.getFoodDescription());
-        foodDate.setText("Expired");
-//        foodImage.setImageResource(R.drawable.beef);
-
+        if (viewMode == LIST_MODE){
+            final TextView foodName = (TextView) view.findViewById(R.id.food_title);
+//            final TextView foodDes = (TextView) view.findViewById(R.id.food_description);
+            final TextView foodDate = (TextView) view.findViewById(R.id.expire_date);
+            foodName.setText(food.getFoodName());
+//            foodDes.setText(food.getFoodDescription());
+            foodDate.setText("Expired");
+        }
         return view;
     }
 }

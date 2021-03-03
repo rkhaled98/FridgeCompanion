@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.fridgecompanion.BundleKeys;
 import com.fridgecompanion.FirebaseDatasource;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.Fridge;
@@ -34,13 +37,16 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FoodAdapter adapter;
     private FoodAdapter foodAdapter;
-    private ListView lv;
+    private FoodAdapter foodAdapter2;
+    private GridView lv;
+    private GridView gv;
     FirebaseDatasource firebaseDatasource;
     FirebaseListAdapter firebaseListAdapter;
     private String TAG = "firebasehomefragment";
     private FridgeAdapter fridgeAdapter;
     private List<Fridge> fridges;
     private List<Food> foods;
+    private ImageButton viewButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,13 +57,18 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        final Button btnAddItem = view.findViewById(R.id.button_add_item);
+        viewButton = (ImageButton) view.findViewById(R.id.view_button);
+
+        ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);
+
 
         fridges = new ArrayList<Fridge>();
 
         foods = new ArrayList<Food>();
 
-        foodAdapter = new FoodAdapter(getActivity(), R.layout.layout_food_item, foods);
+        foodAdapter = new FoodAdapter(getActivity(), R.layout.layout_food_item, foods, FoodAdapter.LIST_MODE);
+
+        foodAdapter2 = new FoodAdapter(getActivity(), R.layout.layout_food_item_v2, foods, FoodAdapter.GALLERY_MODE);
 
         fridgeAdapter = new FridgeAdapter(getActivity(), R.layout.layout_fridge_item, fridges);
 
@@ -69,6 +80,7 @@ public class HomeFragment extends Fragment {
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     foods.add(snapshot.getValue(Food.class));
                     foodAdapter.notifyDataSetChanged();
+                    foodAdapter2.notifyDataSetChanged();
 
 //                    Fridge fridge = new Fridge();
 //
@@ -93,6 +105,7 @@ public class HomeFragment extends Fragment {
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     foods.add(snapshot.getValue(Food.class));
                     foodAdapter.notifyDataSetChanged();
+                    foodAdapter2.notifyDataSetChanged();
 //                    Fridge fridge = new Fridge();
 //
 //                    fridges.clear();
@@ -132,22 +145,35 @@ public class HomeFragment extends Fragment {
 //            firebaseListAdapter = firebaseDatasource.getMyAdapter();
 //            firebaseListAdapter.startListening();
 //            lv.setAdapter(firebaseDatasource.getMyAdapter());
-
-            btnAddItem.setOnClickListener(new View.OnClickListener() {
+            backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "adding item");
-//                    Item item = new Item("test name" , 544);
-                    Food food = new Food();
-                    food.setFoodName("Beef Dish");
-                    food.setFoodDescription("Delicious Beef for tomorrow");
-                    firebaseDatasource.addItemToUser(food);
+                    getActivity().finish();
+                }
+            });
+            viewButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+////                    Item item = new Item("test name" , 544);
+//                    Food food = new Food();
+//                    food.setFoodName("Beef Dish");
+//                    food.setFoodDescription("Delicious Beef for tomorrow");
+//                    firebaseDatasource.addItemToUser(food);
 //                    Fridge fridge = new Fridge("test fridge");
 //                    firebaseDatasource.createFridge(fridge);
 //                    Log.d(TAG, ""+firebaseListAdapter.getCount());
 //                    firebaseDatasource.createFridge(fridge);
 
 //                    mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
+                    if (gv.getVisibility() == GridView.GONE){
+                        gv.setVisibility(GridView.VISIBLE);
+                        lv.setVisibility(GridView.GONE);
+                        viewButton.setImageResource(R.drawable.ic_baseline_view_list_24);
+                    }else{
+                        lv.setVisibility(GridView.VISIBLE);
+                        gv.setVisibility(GridView.GONE);
+                        viewButton.setImageResource(R.drawable.ic_baseline_grid_on_24);
+                    }
                 }
             });
 
@@ -165,7 +191,9 @@ public class HomeFragment extends Fragment {
 
 
 
-        lv = (ListView) view.findViewById(R.id.fridgelistview);
+        lv = (GridView) view.findViewById(R.id.fridgelistview);
+        gv = (GridView) view.findViewById(R.id.fridgegallery);
+        gv.setAdapter(foodAdapter2);
         lv.setAdapter(foodAdapter);
 
         lv.setOnItemClickListener(
@@ -173,6 +201,30 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(getContext(), ItemViewActivity.class);
+                        Food food = foodAdapter.getItem(position);
+                        Bundle b = new Bundle();
+                        b.putString(BundleKeys.FOOD_NAME_KEY, food.getFoodName());
+                        b.putString(BundleKeys.FOOD_IMAGE_KEY, food.getImage());
+                        b.putInt(BundleKeys.FOOD_QUANTITY_KEY, food.getQuantity());
+                        b.putString(BundleKeys.FOOD_DESCRIPTION_KEY, food.getFoodDescription());
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        gv.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                        Intent intent = new Intent(getContext(), ItemViewActivity.class);
+                        Food food = foodAdapter.getItem(position);
+                        Bundle b = new Bundle();
+                        b.putString(BundleKeys.FOOD_NAME_KEY, food.getFoodName());
+                        b.putString(BundleKeys.FOOD_IMAGE_KEY, food.getImage());
+                        b.putInt(BundleKeys.FOOD_QUANTITY_KEY, food.getQuantity());
+                        b.putString(BundleKeys.FOOD_DESCRIPTION_KEY, food.getFoodDescription());
+                        intent.putExtras(b);
                         startActivity(intent);
                     }
                 }
@@ -192,43 +244,5 @@ public class HomeFragment extends Fragment {
 //        lv.setAdapter(firebaseDatasource.getMyAdapter());
 //        DBReader dbreader = new DBReader();
 //        dbreader.start();
-    }
-
-    class DBReader extends Thread{
-        //thread class for fetching all entries in db and setting up Listview
-        private Handler handler = new Handler(Looper.getMainLooper());
-        private Runnable extractData = new Runnable(){
-            @Override
-            public void run() {
-                List<Food> foods = fetchFridgeList();
-                adapter = new FoodAdapter(getActivity(), R.layout.layout_food_item, foods);
-                lv.setAdapter(adapter);
-            }
-        };
-        @Override
-        public void run() {
-            handler.post(extractData);
-        }
-
-
-        private List<Food> fetchFridgeList(){
-            Food food1 = new Food();
-            food1.setFoodName("Apple");
-            food1.setFoodDescription("Super tasty apple");
-            food1.setUnit(Food.UNIT_COUNT);
-            food1.setQuantity(2);
-
-            Food food2 = new Food();
-            food2.setFoodName("Orange");
-            food2.setFoodDescription("Super deceent orange");
-            food2.setUnit(Food.UNIT_COUNT);
-            food2.setQuantity(10);
-            List<Food> foods = new ArrayList<Food>();
-            foods.add(food1);
-            foods.add(food2);
-            foods.add(food1);
-            foods.add(food2);
-            return foods;
-        }
     }
 }

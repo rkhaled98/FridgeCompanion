@@ -4,77 +4,75 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="130dp"
-    android:paddingVertical = "15dp"
-    android:paddingHorizontal = "15dp"
-    android:layout_marginVertical="15dp"
+    android:paddingVertical = "10dp"
+    android:paddingHorizontal = "10dp"
+    android:layout_marginVertical="10dp"
     android:background="@drawable/rounded"
     >
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
             android:id="@+id/food_container">
                 <ImageView
                     android:id="@+id/food_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:scaleType="fitXY"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:scaleType="fitCenter"
                     android:contentDescription="@string/image_content_des" />
         </androidx.cardview.widget.CardView>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toEndOf="@id/food_container"
             android:layout_marginStart="15dp">
                 <TextView
                     android:id="@+id/food_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
                     android:text="Food Item"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="#000000"/>
-                <TextView
-                    android:id="@+id/food_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/food_title"
-                    android:text="Food description for sth"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="15dp"
-                    android:textColor="#808080" />
+                    android:lines="2"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="#000000"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:id="@+id/time_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below = "@id/food_description"
-                    android:layout_marginTop="6dp"
+                    android:layout_width="20dp"
+                    android:layout_height="23dp"
+                    android:scaleType="fitXY"
+                    android:layout_below="@id/food_title"
+                    android:paddingTop="3dp"
+                    android:layout_marginStart="15dp"
                     android:src = "@drawable/ic_baseline_access_time_24"/>
                 <TextView
                     android:id="@+id/expire_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below = "@id/food_description"
+                    android:layout_below="@id/food_title"
                     android:layout_toEndOf="@id/time_icon"
                     android:text = "2 days"
                     android:padding="3dp"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
                     />
+
 
                 <TextView
                     android:id="@+id/amount_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_below = "@id/food_description"
+                    android:layout_below="@id/food_title"
                     android:text = "3 Left"
                     android:padding="3dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:textColor="#000000"
-                    android:textSize="20sp"
                     android:textStyle="bold"
                     />
         </RelativeLayout>
