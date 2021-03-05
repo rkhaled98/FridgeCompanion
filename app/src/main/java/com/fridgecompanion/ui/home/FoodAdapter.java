@@ -69,10 +69,8 @@ public class FoodAdapter extends ArrayAdapter<Food> {
 
         if (viewMode == LIST_MODE){
             final TextView foodName = (TextView) view.findViewById(R.id.food_title);
-//            final TextView foodDes = (TextView) view.findViewById(R.id.food_description);
             final TextView foodDate = (TextView) view.findViewById(R.id.expire_date);
             foodName.setText(food.getFoodName());
-//            foodDes.setText(food.getFoodDescription());
             foodDate.setText("Expired");
         }
         return view;

@@ -7,7 +7,6 @@
     tools:context=".ui.home.HomeFragment"
     android:background="#AED3F9"
     android:orientation="vertical"
-    android:clipToPadding="false"
     android:paddingTop = "10dp"
     >
 
@@ -85,4 +84,12 @@
         android:numColumns="3"
         android:scrollbars="none"
         android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/new_item_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|left"
+        android:visibility="gone"
+        android:src="@drawable/rectangle_1_4"/>
 </LinearLayout>

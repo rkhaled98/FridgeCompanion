@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ public class HomeFragment extends Fragment {
     private FoodAdapter foodAdapter2;
     private GridView lv;
     private GridView gv;
+    private ImageView backgroundImg;
     FirebaseDatasource firebaseDatasource;
     FirebaseListAdapter firebaseListAdapter;
     private String TAG = "firebasehomefragment";
@@ -60,6 +62,8 @@ public class HomeFragment extends Fragment {
         viewButton = (ImageButton) view.findViewById(R.id.view_button);
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);
+
+        backgroundImg = (ImageView)view.findViewById(R.id.new_item_background);
 
 
         fridges = new ArrayList<Fridge>();
@@ -84,6 +88,13 @@ public class HomeFragment extends Fragment {
                     }else {
                         foodAdapter2.notifyDataSetChanged();
                     }
+
+//                    if(foods.size() != 0){
+//                        backgroundImg.setVisibility(ImageView.GONE);
+//                    }else{
+//                        backgroundImg.setVisibility(ImageView.VISIBLE);
+//                    }
+
 //                    Fridge fridge = new Fridge();
 //
 //                    DataSnapshot items = snapshot.child("items");
@@ -111,6 +122,13 @@ public class HomeFragment extends Fragment {
                     }else {
                         foodAdapter2.notifyDataSetChanged();
                     }
+
+
+//                    if(foods.size() != 0){
+//                        backgroundImg.setVisibility(ImageView.GONE);
+//                    }else{
+//                        backgroundImg.setVisibility(ImageView.VISIBLE);
+//                    }
 //                    Fridge fridge = new Fridge();
 //
 //                    fridges.clear();
@@ -234,6 +252,13 @@ public class HomeFragment extends Fragment {
                     }
                 }
         );
+
+//        if(foods.size() != 0){
+//            backgroundImg.setVisibility(ImageView.GONE);
+//        }else{
+//            backgroundImg.setVisibility(ImageView.VISIBLE);
+//            backgroundImg.setImageResource(R.drawable.rectangle_1_4);
+//        }
 
 
     }
