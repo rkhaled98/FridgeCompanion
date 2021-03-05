@@ -9,6 +9,7 @@ public class Food {
     public static int UNIT_GRAMS = 2;
     public static int UNIT_POUND = 3;
     public static int UNIT_MILLILITER = 4;
+    public static int UNIT_NONE = 5;
 
     private int quantity;
     private int unit;
@@ -20,6 +21,7 @@ public class Food {
     private String image;
     private double calories;
     private String foodDescription;
+    private String nutrition;
 
 
 
@@ -112,5 +114,12 @@ public class Food {
                 ", calories=" + calories +
                 ", foodDescription='" + foodDescription + '\'' +
                 '}';
+    }
+    public String getNutrition() {
+        return nutrition;
+    }
+
+    public void setNutrition(String nutrition) {
+        this.nutrition = nutrition;
     }
 }

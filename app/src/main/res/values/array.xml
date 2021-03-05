@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unit_spinner_entries">
+        <item>count</item>
+        <item>%</item>
+        <item>grams</item>
+        <item>lbs</item>
+        <item>ml</item>
+        <item>none</item>
+    </string-array>
+</resources>
