@@ -61,6 +61,8 @@ dependencies {
     // FirebaseUI for Cloud Storage
     implementation 'com.firebaseui:firebase-ui-storage:7.1.1'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 //    compile 'com.google.firebase:firebase-database:11.8.0'
 //    compile 'com.google.firebase:firebase-auth:11.8.0'
 }
