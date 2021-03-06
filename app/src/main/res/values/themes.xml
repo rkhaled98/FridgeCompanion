@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.FridgeCompanion" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/fridge_blue</item>
+        <item name="colorPrimary">#ababfd</item>
         <item name="colorPrimaryVariant">@color/fridge_blue</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -11,9 +11,14 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <!-- Customize your theme here. -->
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="colorAccent">@color/fridge_blue</item>
-        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="LaunchTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/fridge_blue</item>
     </style>
 </resources>
