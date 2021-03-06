@@ -40,4 +40,6 @@
     <string name="more_information">More Information</string>
     <string name="new_image">New Image</string>
     <string name="food_image">Food Image</string>
+    <string name="first_name_hint">First Name</string>
+    <string name="last_name_hint">Last Name</string>
 </resources>

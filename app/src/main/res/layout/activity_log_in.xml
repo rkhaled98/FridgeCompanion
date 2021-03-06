@@ -1,52 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context=".LogInActivity" >
-
-    <EditText
-        android:id="@+id/emailField"
+                tools:context=".LogInActivity"
+                android:background="#AED3F9"
+                android:weightSum="5">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="@string/email_hint" >
+        android:layout_height="0dp"
+        android:text="Fridge Companion"
+        android:layout_weight="2"
+        android:gravity="center">
 
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/passwordField"
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="80dp"
+            android:layout_height="180dp"
+            android:src="@drawable/icon2"
+            android:scaleType="centerCrop"
+            android:paddingBottom="20dp"
+            android:layout_alignRight="@id/app_title2"
+            />
+        <TextView
+            android:id="@+id/app_title1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:paddingTop="85dp"
+            android:text="FRIDGE"
+            android:textSize="30sp"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/app_title2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_title1"
+            android:fontFamily="@font/roboto_bold"
+            android:text="COMPANION"
+            android:textSize="30sp"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/emailField"
-        android:layout_below="@+id/emailField"
-        android:ems="10"
-        android:hint="@string/password_hint"
-        android:inputType="textPassword" />
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="3">
+        <EditText
+            android:id="@+id/emailField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="@string/email_hint"
+            android:backgroundTint="@color/black"
+            >
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/passwordField"
-        android:layout_below="@+id/passwordField"
-        android:text="@string/login_button_label" />
+            <requestFocus />
+        </EditText>
 
-    <TextView
-        android:id="@+id/signUpText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/loginButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="69dp"
-        android:text="@string/sign_up_text" />
+        <EditText
+            android:id="@+id/passwordField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/emailField"
+            android:layout_below="@+id/emailField"
+            android:ems="10"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:backgroundTint="@color/black"/>
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/passwordField"
+            android:layout_below="@+id/passwordField"
+            android:text="@string/login_button_label"
+            android:layout_marginTop="10dp"
+           />
+
+        <TextView
+            android:id="@+id/signUpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/sign_up_text" />
+    </RelativeLayout>
+
+</LinearLayout>
