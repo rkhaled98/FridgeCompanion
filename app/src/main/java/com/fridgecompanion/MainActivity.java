@@ -55,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     //.setAction("Action", null).show();
+                    Bundle fridgeBundle = getIntent().getExtras();
 
                     Intent intent = new Intent(getApplicationContext(), ItemEntryActivity.class);
+
+                    intent.putExtras(fridgeBundle);
                     startActivity(intent);
                 }
             });
