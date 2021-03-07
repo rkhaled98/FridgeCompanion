@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +51,7 @@ public class HomeFragment extends Fragment {
     private List<Fridge> fridges;
     private List<Food> foods;
     private ImageButton viewButton;
+    private String fridgeID;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,10 +79,18 @@ public class HomeFragment extends Fragment {
 
         fridgeAdapter = new FridgeAdapter(getActivity(), R.layout.layout_fridge_item, fridges);
 
+        Bundle b = getActivity().getIntent().getExtras();
+        if (b != null){
+            fridgeID = b.getString("FRIDGE_KEY");
+            TextView tv = (TextView)view.findViewById(R.id.fridge_name_text);
+            tv.setText(b.getString("FRIDGE_NAME"));
+        }
+        Log.d("test", fridgeID);
+
         try {
             firebaseDatasource = new FirebaseDatasource(getContext());
 
-            firebaseDatasource.getItemsReference().addChildEventListener(new ChildEventListener() {
+            firebaseDatasource.getItemsReferenceByFridgeId(fridgeID).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     foods.add(snapshot.getValue(Food.class));
@@ -178,9 +189,6 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 ////                    Item item = new Item("test name" , 544);
-//                    Food food = new Food();
-//                    food.setFoodName("Beef Dish");
-//                    food.setFoodDescription("Delicious Beef for tomorrow");
 //                    firebaseDatasource.addItemToUser(food);
 //                    Fridge fridge = new Fridge("test fridge");
 //                    firebaseDatasource.createFridge(fridge);

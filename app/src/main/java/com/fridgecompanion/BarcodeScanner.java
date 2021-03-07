@@ -25,6 +25,7 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
     public static String barcode_text;
     ZXingScannerView scannerView;
     public Food item;
+    String key = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,11 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
         setContentView(R.layout.activity_barcode);
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
+
+        Bundle b = getIntent().getExtras();
+        if(b!= null){
+            key = b.getString("FRIDGE_KEY");
+        }
     }
 
     @Override
@@ -54,7 +60,7 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
                     food.setFoodName(item.getFoodName());
                     food.setCalories(item.getCalories());
                     food.setImage(item.getImage());
-                    firebaseDatasource.addItemToUser(food);
+                    firebaseDatasource.addItemToFridgeId(food, key);
                     Log.d("check","added" + item.getFoodName() + item.getImage());
                     Log.d("check",item.getId());
                     Log.d("check",item.getFoodName());

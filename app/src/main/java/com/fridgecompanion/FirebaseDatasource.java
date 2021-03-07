@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class FirebaseDatasource {
@@ -98,8 +99,16 @@ public class FirebaseDatasource {
 //        mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
     }
 
-    public void createFridge(Fridge fridge) {
-        mDatabase.child("users").child(mUserId).child("fridges").push().setValue(fridge);
+    public String createFridge(Fridge fridge) {
+        fridge.setPrimOwner(mUserId);
+        DatabaseReference ref = mDatabase.child("fridges").push();
+        ref.setValue(fridge);
+        mDatabase.child("users").child(mUserId).child("fridgelist").child(ref.getKey()).setValue(fridge.getName());
+        return ref.getKey();
+    }
+
+    public DatabaseReference getFridgeListReference() {
+        return mDatabase.child("users").child(mUserId).child("fridgelist");
     }
 
     public FirebaseListAdapter<Fridge> getMyAdapter() {
@@ -107,10 +116,46 @@ public class FirebaseDatasource {
     }
 
     public DatabaseReference getFridgesReference() {
-        return mDatabase.child("users").child(mUserId).child("fridges");
+        return mDatabase.child("fridges");
     }
+
 
     public DatabaseReference getItemsReference() {
         return mDatabase.child("users").child(mUserId).child("items");
+    }
+
+    public DatabaseReference getFridgeReferenceById(String id){
+        return mDatabase.child("fridges").child(id);
+    }
+
+    public DatabaseReference getItemsReferenceByFridgeId(String id){
+        return mDatabase.child("fridges").child(id).child("items");
+    }
+
+    public void addSecondaryOwner(String FridgeId, String FridgeName){
+        //mDatabase.child("fridges").child(FridgeId).child("secOwner").child(mUserId).setValue("Some Name");
+        mDatabase.child("users").child(mUserId).child("fridgelist").child(FridgeId).setValue(FridgeName);
+    }
+
+    public void addItemToFridgeId(Food food, String id) {
+        mDatabase.child("fridges").child(id)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("items").push().setValue(food);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+//        mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
+    }
+
+    public void setUserNames(String firstName, String lastName){
+        mDatabase.child("users").child(mUserId).child("firstname").setValue(firstName);
+        mDatabase.child("users").child(mUserId).child("lastname").setValue(lastName);
+
     }
 }
