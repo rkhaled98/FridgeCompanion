@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FridgeCompanion">
-        <activity android:name=".ItemEntryActivity"></activity>
+        <activity android:name=".ItemEntryActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_item_entry">
+        </activity>
         <activity android:name=".ItemViewActivity" />
         <activity
             android:name=".MainActivity"
