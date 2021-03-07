@@ -15,7 +15,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 import java.util.Calendar;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class ItemEntryActivity extends AppCompatActivity {
     private final String formatDate = "MM.dd.yyyy";
@@ -37,6 +43,7 @@ public class ItemEntryActivity extends AppCompatActivity {
 
     public Food food;
     public String imageUrl;
+    public Food tempItem = new Food();
 
     Calendar expireDate = Calendar.getInstance();
     Calendar purchaseDate = Calendar.getInstance();
@@ -74,6 +81,56 @@ public class ItemEntryActivity extends AppCompatActivity {
         purchaseDate.set(Calendar.MILLISECOND, 0);
     }
 
+    //Search item name in the Edamam database
+    public void onClickButtonSearch(View view){
+        searchDatabasebyName(nameEdit.getText().toString());
+        nameEdit.setText(tempItem.getFoodName());
+        int data_cal = (int) tempItem.getCalories();
+        calorieEdit.setText(String.valueOf(data_cal));
+        nutritionEdit.setText(tempItem.getNutrition());
+        imageUrl = tempItem.getImage();
+        Picasso.get().load(imageUrl).into(imageView);
+    }
+
+    public void searchDatabasebyName(String name) {
+        EdamamService.searchName(name, new Callback() {
+            //Notify user to check Internet if getting response failed.
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext()
+                                , "No Internet! Please check connections"
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                });
+                finish();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                tempItem = EdamamService.processResults(response);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext()
+                                , "No Internet! Please check connections"
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                });
+                //Check if the database returns item info. Use manual entry if not.
+                if(tempItem.getFoodName().isEmpty()){
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext()
+                                    , "Items Not Found in database. Please enter manually."
+                                    , Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     public void onClickExpireDate(View view){
         DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -109,7 +166,7 @@ public class ItemEntryActivity extends AppCompatActivity {
                 purchaseDate.get(Calendar.DAY_OF_MONTH));
         D.show();
     }
-
+    //Display results from Edamam database
     public void onClickRightButton(View view){
         //code for barcode stuff - forever :)
         Intent intent = new Intent(getApplicationContext(), BarcodeScanner.class);
@@ -128,9 +185,6 @@ public class ItemEntryActivity extends AppCompatActivity {
                 nutritionEdit.setText(bundle.getString(NUTRITION));
                 imageUrl = bundle.getString(IMAGE);
                 Picasso.get().load(imageUrl).into(imageView);
-
-
-
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

@@ -48,9 +48,17 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
         barcode_text = result.getText();
         //search barcode in EDAMAM
         EdamamService.searchBarcode(barcode_text, new Callback() {
+            //Notify user to check Internet if getting response failed.
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext()
+                                , "No Internet! Please check connections"
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                });
+                finish();
             }
 
             @Override
@@ -74,6 +82,16 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
                     Log.d("check",item.getFoodName());
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                //Check if the database returns item info. Use manual entry if not.
+                if(item.getFoodName().isEmpty()){
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext()
+                                    , "Items Not Found in database. Please enter manually."
+                                    , Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
                 finish();
             }

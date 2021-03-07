@@ -31,7 +31,9 @@ public class Food {
     }
 
     private void setDefaultValues() {
-        image = "https://www.edamam.com/food-img/63f/63fefaf1b9dc3674e7b105a3d91b2ba0.png";
+
+        //https://www.edamam.com/food-img/63f/63fefaf1b9dc3674e7b105a3d91b2ba0.png
+        image = "https://i.pinimg.com/originals/60/ed/ab/60edabe557e8139d52dae12f380205dc.png";
         quantity = 0;
         unit = UNIT_COUNT;
         foodName = "";

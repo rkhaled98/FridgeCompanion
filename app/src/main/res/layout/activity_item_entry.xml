@@ -72,6 +72,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
+
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,27 +86,44 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text = "@string/key_information"
+                android:layout_marginBottom="15dp"
+                android:text="@string/key_information"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="15dp"/>
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/product_name" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/name_edit"
+                    android:layout_width="296dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
+
+                <ImageButton
+                    android:id="@+id/button_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/fui_transparent"
+                    android:onClick="onClickButtonSearch"
+                    android:paddingHorizontal="10dp"
+                    android:src="@drawable/ic_baseline_search_24" />
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text = "@string/product_name"/>
-
-                <EditText
-                    android:id="@+id/name_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"/>
-
 
 
                 <TextView
@@ -199,6 +217,7 @@
                         android:textIsSelectable="false"
                         android:layoutDirection="ltr"/>
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 
