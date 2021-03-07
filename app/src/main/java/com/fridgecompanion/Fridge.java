@@ -6,10 +6,15 @@ import java.util.List;
 public class Fridge {
     private String name;
     private List<Food> items;
+    private String primOwner;
+    private List<String> secOwners;
+    private List<FridgeSetting> settings;
 
     public Fridge() {
         this.name = "test fridge";
         this.items = new ArrayList<Food>();
+        this.secOwners = new ArrayList<String>();
+        this.settings = new ArrayList<FridgeSetting>();
     }
 
     public Fridge(String name) {
@@ -35,4 +40,22 @@ public class Fridge {
     public void addItem(Food item) {
         this.items.add(item);
     }
+
+    public void setPrimOwner(String owner){
+        this.primOwner = owner;
+        this.settings.add(new FridgeSetting(owner));
+    }
+
+    public String getPrimOwner(){return this.primOwner;}
+
+    public void addSecOwner(String owner){
+        this.secOwners.add(owner);
+        this.settings.add(new FridgeSetting(owner));
+    }
+
+    public void setSecOwners(List<String> owners){this.secOwners = owners;}
+
+    public void removeSecOwner(String owner){this.secOwners.remove(owner);}
+
+
 }
