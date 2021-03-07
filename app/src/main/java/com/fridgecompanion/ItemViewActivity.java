@@ -27,6 +27,8 @@ public class ItemViewActivity extends AppCompatActivity {
         final TextView foodDes = (TextView) findViewById(R.id.food_description);
         final ImageView foodImage = (ImageView) findViewById(R.id.food_item_image);
         final TextView foodDate = (TextView) findViewById(R.id.expire_date);
+        final TextView foodCal = (TextView) findViewById((R.id.food_calories));
+        final TextView foodQuantity = (TextView) findViewById((R.id.amount_left));
 
         //retrieve from bundle and store in food
         Food food = null;
@@ -38,6 +40,12 @@ public class ItemViewActivity extends AppCompatActivity {
         }
 
         foodName.setText(food.getFoodName());
+        foodDes.setText(food.getFoodDescription());
+        String calories = "Calories: "+food.getCalories();
+        foodCal.setText(calories);
+        String quantity = food.getQuantity()+" Left";
+        foodQuantity.setText(quantity);
+
         if (!food.getImage().isEmpty()) {
             Picasso.get().load(food.getImage()).into(foodImage);
         }

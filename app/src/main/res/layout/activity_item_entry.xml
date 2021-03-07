@@ -230,6 +230,7 @@
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp">
                     <ImageView
+                        android:id="@+id/image_edit"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
                         android:scaleType="fitCenter"
@@ -278,7 +279,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:inputType="number"/>
+                    android:inputType="numberDecimal"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

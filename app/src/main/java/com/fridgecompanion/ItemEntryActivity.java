@@ -2,21 +2,28 @@ package com.fridgecompanion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import com.squareup.picasso.Picasso;
 import java.util.Calendar;
 
 public class ItemEntryActivity extends AppCompatActivity {
     private final String formatDate = "MM.dd.yyyy";
-
+    public static final int LAUNCH_BARCODE = 1;
+    public static final String FOODNAME = "name";
+    public static final String IMAGE = "image";
+    public static final String CALORIES = "calories";
+    public static final String NUTRITION = "nutrition";
 
     EditText nameEdit;
     EditText quantityEdit;
@@ -26,8 +33,10 @@ public class ItemEntryActivity extends AppCompatActivity {
     EditText nutritionEdit;
     EditText noteEdit;
     Spinner spinner;
+    ImageView imageView;
 
-    Food food;
+    public Food food;
+    public String imageUrl;
 
     Calendar expireDate = Calendar.getInstance();
     Calendar purchaseDate = Calendar.getInstance();
@@ -45,6 +54,7 @@ public class ItemEntryActivity extends AppCompatActivity {
         nutritionEdit = (EditText)findViewById(R.id.nutrition_edit);
         noteEdit = (EditText)findViewById(R.id.note_edit);
         spinner = (Spinner)findViewById(R.id.unit_spinner);
+        imageView = (ImageView)findViewById((R.id.image_edit));
 
         setDefaultTime();
         purchaseEdit.setText(DateFormat.format(formatDate, purchaseDate.getTime()).toString());
@@ -102,29 +112,55 @@ public class ItemEntryActivity extends AppCompatActivity {
 
     public void onClickRightButton(View view){
         //code for barcode stuff - forever :)
+        Intent intent = new Intent(getApplicationContext(), BarcodeScanner.class);
+        startActivityForResult(intent,LAUNCH_BARCODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == LAUNCH_BARCODE) {
+            if(resultCode == Activity.RESULT_OK){
+                Bundle bundle = data.getExtras();
+                nameEdit.setText(bundle.getString(FOODNAME));
+                int data_cal = (int) bundle.getDouble(CALORIES,0);
+                calorieEdit.setText(String.valueOf(data_cal));
+                nutritionEdit.setText(bundle.getString(NUTRITION));
+                imageUrl = bundle.getString(IMAGE);
+                Picasso.get().load(imageUrl).into(imageView);
+
+
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 
     public void onClickLeftButton(View view){
         finish();
     }
 
-    public void onClickSaveButton(View view){
+    public void onClickSaveButton(View view) throws Exception {
         if(validEntry()){
             saveFoodFromEntry();
             //attach food to firebase here
+            FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
+            firebaseDatasource.addItemToUser(food);
             Toast.makeText(getApplicationContext(), "Item Added", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
     private boolean validEntry(){
-        if (isEmpty(nameEdit)){
+        if (isEmptyEditText(nameEdit)){
             nameEdit.requestFocus();
             Toast.makeText(getApplicationContext(), "Product name is required!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(isEmpty(quantityEdit)){
+        if(isEmptyEditText(quantityEdit)){
             quantityEdit.requestFocus();
             Toast.makeText(getApplicationContext(), "Quantity is required!", Toast.LENGTH_SHORT).show();
             return false;
@@ -134,9 +170,9 @@ public class ItemEntryActivity extends AppCompatActivity {
             return false;
         }
 
-        if(isEmpty(expireEdit)){
+        if(isEmptyEditText(expireEdit)){
             expireEdit.requestFocus();
-            Toast.makeText(getApplicationContext(), "Expire date is required!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Expiration date is required!", Toast.LENGTH_SHORT).show();
             return false;
         }else if (expireDate.getTimeInMillis() - purchaseDate.getTimeInMillis() < 0){
             expireEdit.requestFocus();
@@ -146,7 +182,7 @@ public class ItemEntryActivity extends AppCompatActivity {
 
         return true;
     }
-    private boolean isEmpty(EditText etText) {
+    private boolean isEmptyEditText(EditText etText) {
         return etText.getText().toString().trim().length() == 0;
     }
     private void saveFoodFromEntry(){
@@ -155,20 +191,26 @@ public class ItemEntryActivity extends AppCompatActivity {
         food.setEnteredDate(purchaseDate.getTimeInMillis());
         food.setExpireDate(expireDate.getTimeInMillis());
         food.setUnit(spinner.getSelectedItemPosition());
-        food.setQuantity(Integer.parseInt(quantityEdit.toString()));
+        food.setQuantity(Integer.parseInt(quantityEdit.getText().toString()));
 
 
         //optional entry
-        if(!isEmpty(noteEdit)){
+        if(!isEmptyEditText(noteEdit)){
             food.setFoodDescription(noteEdit.getText().toString());
         }
-        if(!isEmpty(nutritionEdit)){
+        if(!isEmptyEditText(nutritionEdit)){
             food.setNutrition(nutritionEdit.getText().toString());
         }
-        if(!isEmpty(calorieEdit)){
+        if(!isEmptyEditText(calorieEdit)){
             food.setCalories(Double.parseDouble(calorieEdit.getText().toString()));
         }
+        if(!imageUrl.isEmpty()){
+            food.setImage(imageUrl);
+        }
+
     }
+
+
 
 
 }
