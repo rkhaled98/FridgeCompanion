@@ -1,16 +1,24 @@
 package com.fridgecompanion;
 
+import android.text.format.DateFormat;
+
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Food implements Serializable {
+    private final String formatDate = "MM.dd.yyyy";
 
-    public static int UNIT_COUNT = 0;
-    public static int UNIT_PERCENTAGE = 1;
-    public static int UNIT_GRAMS = 2;
-    public static int UNIT_POUND = 3;
-    public static int UNIT_MILLILITER = 4;
-    public static int UNIT_NONE = 5;
+    public final static int UNIT_COUNT = 0;
+    public final static int UNIT_PERCENTAGE = 1;
+    public final static int UNIT_GRAMS = 2;
+    public final static int UNIT_POUND = 3;
+    public final static int UNIT_MILLILITER = 4;
+    public final static int UNIT_NONE = 5;
 
     @Override
     public String toString() {
@@ -59,7 +67,10 @@ public class Food implements Serializable {
         unit = UNIT_COUNT;
         foodName = "";
         enteredDate = Calendar.getInstance().getTimeInMillis();
-        expireDate = 0;
+        expireDate = Calendar.getInstance().getTimeInMillis();
+        calories = 0;
+        nutrition = "";
+
     }
 
     public String getFoodDescription() {
@@ -80,6 +91,28 @@ public class Food implements Serializable {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public String getQuantityString(){
+        String quantityString;
+        switch (unit){
+            case UNIT_GRAMS:
+                quantityString = quantity + " grams";
+                break;
+            case UNIT_MILLILITER:
+                quantityString = quantity + " ml";
+                break;
+            case UNIT_POUND:
+                quantityString = quantity + " lbs";
+                break;
+            case UNIT_PERCENTAGE:
+                quantityString = quantity + " %";
+                break;
+            default:
+                quantityString = quantity + " left";
+                break;
+        }
+        return quantityString;
     }
 
     public void setQuantity(int quantity) {
@@ -104,6 +137,16 @@ public class Food implements Serializable {
 
     public long getEnteredDate() {
         return enteredDate;
+    }
+
+    public String getEnteredDateString(){
+        Date d = new Date(this.enteredDate);
+        return DateFormat.format(formatDate, d).toString();
+    }
+
+    public String getExpireDateString(){
+        Date d = new Date(this.expireDate);
+        return DateFormat.format(formatDate, d).toString();
     }
 
     public void setEnteredDate(long enteredDate) {
@@ -148,5 +191,20 @@ public class Food implements Serializable {
 
     public void setFirebaseFridgeId(String firebaseFridgeId) {
         this.firebaseFridgeId = firebaseFridgeId;
+    }
+
+    public String getDaysFromExpirationString(long currentTime){
+        int difference= ((int)((expireDate/(24*60*60*1000)) -(int)(currentTime/(24*60*60*1000))));
+        if (difference > 1){
+            return difference+ " days";
+        }else if (difference == 1) {
+            return difference + " day";
+        }else{
+            return "EXPIRED";
+        }
+    }
+
+    public int getDaysFromExpiration(long currentTime){
+        return ((int)((expireDate/(24*60*60*1000)) -(int)(currentTime/(24*60*60*1000))));
     }
 }

@@ -1,6 +1,7 @@
 package com.fridgecompanion.ui.home;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import com.fridgecompanion.Food;
 import com.fridgecompanion.R;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -82,8 +86,18 @@ public class FoodAdapter extends ArrayAdapter<Food> {
             if (viewMode == LIST_MODE){
                 final TextView foodName = (TextView) view.findViewById(R.id.food_title);
                 final TextView foodDate = (TextView) view.findViewById(R.id.expire_date);
+                final TextView foodLeftOver = (TextView)view.findViewById(R.id.amount_left);
                 foodName.setText(food.getFoodName());
-                foodDate.setText("Expired");
+
+                long currentTime =Calendar.getInstance().getTimeInMillis();
+                foodDate.setText(food.getDaysFromExpirationString(currentTime));
+                foodLeftOver.setText(food.getQuantityString());
+
+                if(food.getDaysFromExpiration(currentTime)<4){
+                    foodDate.setTextColor(Color.parseColor("#ff0000"));
+                }else{
+                    foodDate.setTextColor(Color.parseColor("#808080"));
+                }
             }
         }else{
             ;

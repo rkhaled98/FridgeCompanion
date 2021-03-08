@@ -59,6 +59,7 @@
                     android:layout_below="@id/food_title"
                     android:layout_toEndOf="@id/time_icon"
                     android:text = "2 days"
+                    android:textStyle="bold"
                     android:padding="3dp"
                     />
 

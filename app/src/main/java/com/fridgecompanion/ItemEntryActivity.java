@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -47,6 +48,8 @@ public class ItemEntryActivity extends AppCompatActivity {
     public Food tempItem = new Food();
 
     private String fridgeID;
+    private int editMode = 0;
+    // editMode == 0 if adding new item and editMode == 1 if editing an item
 
     Calendar expireDate = Calendar.getInstance();
     Calendar purchaseDate = Calendar.getInstance();
@@ -75,6 +78,25 @@ public class ItemEntryActivity extends AppCompatActivity {
         if (b != null){
             fridgeID = b.getString("FRIDGE_KEY");
             food.setFirebaseFridgeId(fridgeID);
+
+            Food f = (Food)b.getSerializable(BundleKeys.FOOD_OBJECT_KEY);
+            if (f != null){
+                editMode = 1;
+                food = f;
+                fridgeID = food.getFirebaseFridgeId();
+                nameEdit.setText(food.getFoodName());
+                quantityEdit.setText(String.valueOf(food.getQuantity()));
+                purchaseEdit.setText(food.getEnteredDateString());
+                expireEdit.setText(food.getExpireDateString());
+                calorieEdit.setText(String.valueOf(food.getCalories()));
+                nutritionEdit.setText(food.getNutrition());
+                noteEdit.setText(food.getFoodDescription());
+                spinner.setSelection(food.getUnit());
+                imageUrl = food.getImage();
+                expireDate.setTimeInMillis(food.getExpireDate());
+                purchaseDate.setTimeInMillis(food.getEnteredDate());
+                Picasso.get().load(imageUrl).into(imageView);
+            }
         }
 
     }
@@ -93,12 +115,12 @@ public class ItemEntryActivity extends AppCompatActivity {
     //Search item name in the Edamam database
     public void onClickButtonSearch(View view){
         searchDatabasebyName(nameEdit.getText().toString());
-        nameEdit.setText(tempItem.getFoodName());
-        int data_cal = (int) tempItem.getCalories();
-        calorieEdit.setText(String.valueOf(data_cal));
-        nutritionEdit.setText(tempItem.getNutrition());
-        imageUrl = tempItem.getImage();
-        Picasso.get().load(imageUrl).into(imageView);
+//        nameEdit.setText(tempItem.getFoodName());
+//        int data_cal = (int) tempItem.getCalories();
+//        calorieEdit.setText(String.valueOf(data_cal));
+//        nutritionEdit.setText(tempItem.getNutrition());
+//        imageUrl = tempItem.getImage();
+//        Picasso.get().load(imageUrl).into(imageView);
     }
 
     public void searchDatabasebyName(String name) {
@@ -210,15 +232,32 @@ public class ItemEntryActivity extends AppCompatActivity {
             saveFoodFromEntry();
             //attach food to firebase here
             FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
+            if(editMode == 0){
+                //adding new fridge mode
+                if (!fridgeID.isEmpty()){
+                    firebaseDatasource.addItemToFridgeId(food, fridgeID);
+                    Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
+                }
 
-            if (!fridgeID.isEmpty()){
-                firebaseDatasource.addItemToFridgeId(food, fridgeID);
-                Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
+                finish();
+            }else{
+                //editing fridge mode
+                if(!food.getFirebaseFridgeId().isEmpty() && !food.getFirebaseKey().isEmpty()){
+                    firebaseDatasource.editItemToFridgeId(food, food.getFirebaseFridgeId(), food.getFirebaseKey());
+                }else {
+                    Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
+                }
+                // Build a result intent and post it back.
+                Intent resultIntent = new Intent();
+                Bundle b = new Bundle();
+                b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
+                resultIntent.putExtras(b);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+
             }
-
-            finish();
         }
     }
 
