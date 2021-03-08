@@ -20,6 +20,7 @@
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:scaleType="fitCenter"
-                    android:contentDescription="@string/image_content_des" />
+                    android:contentDescription="@string/image_content_des"
+                    android:background="#AED3F9"/>
         </androidx.cardview.widget.CardView>
 </RelativeLayout>
