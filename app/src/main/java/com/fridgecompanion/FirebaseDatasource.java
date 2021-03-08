@@ -152,7 +152,23 @@ public class FirebaseDatasource {
 
                     }
                 });
-//        mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
+    }
+
+    public void editItemToFridgeId(Food food, String fridgeId, String foodId) {
+        mDatabase.child("fridges").child(fridgeId).child("items")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(foodId)){
+                            dataSnapshot.child(foodId).getRef().setValue(food);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public void removeItemByFridgeId(Food food, String fridgeId) {

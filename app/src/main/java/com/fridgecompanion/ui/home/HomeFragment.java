@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class HomeFragment extends Fragment {
 
@@ -129,7 +130,16 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    foods.add(snapshot.getValue(Food.class));
+                    Food food = snapshot.getValue(Food.class);
+                    int index = IntStream.range(0, foods.size())
+                            .filter(i -> foods.get(i).getFirebaseKey().equals(food.getFirebaseKey()))
+                            .findFirst().orElse(-1);
+                    if (index != -1){
+                        foods.set(index, food);
+                    }else{
+
+                    }
+
                     if (gv.getVisibility() == GridView.GONE){
                         foodAdapter.notifyDataSetChanged();
                     }else {
