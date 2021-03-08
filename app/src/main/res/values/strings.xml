@@ -4,6 +4,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_item_entry">Add an Item</string>
     <string name="setting">Setting</string>
     <string name="history">History</string>
     <string name="image_content_des">Food Image</string>

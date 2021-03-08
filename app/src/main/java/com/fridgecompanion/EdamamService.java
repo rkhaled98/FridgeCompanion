@@ -61,6 +61,9 @@ public class EdamamService {
                 item.setImage(food.getString("image"));
                 JSONObject nutrients = food.getJSONObject("nutrients");
                 item.setCalories(nutrients.getDouble("ENERC_KCAL"));
+                item.setNutrition("Per 100 grams: "+"Protein: "+String.format("%.2f",nutrients.getDouble("PROCNT"))+"g; "+"Fat: "+
+                        String.format("%.2f",nutrients.getDouble("FAT"))+"g; "+"Cholest.: "+
+                        String.format("%.2f",nutrients.getDouble("CHOCDF"))+"mg");
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();

@@ -22,6 +22,8 @@ public class SignUpActivity extends AppCompatActivity {
     protected EditText passwordEditText;
     protected EditText emailEditText;
     protected Button signUpButton;
+    protected EditText firstNameEditText;
+    protected EditText lastNameEditText;
     private FirebaseAuth mFirebaseAuth;
 
     private String TAG = "firebasesignin";
@@ -38,6 +40,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         passwordEditText = (EditText)findViewById(R.id.passwordField);
         emailEditText = (EditText)findViewById(R.id.emailField);
+        firstNameEditText = (EditText)findViewById(R.id.firstNameField);
+        lastNameEditText = (EditText)findViewById(R.id.lastNameField);
         signUpButton = (Button)findViewById(R.id.signupButton);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -45,11 +49,15 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String password = passwordEditText.getText().toString();
                 String email = emailEditText.getText().toString();
+                String firstName = firstNameEditText.getText().toString();
+                String lastName =lastNameEditText.getText().toString();
 
                 password = password.trim();
                 email = email.trim();
+                firstName = firstName.trim();
+                lastName= lastName.trim();
 
-                if (password.isEmpty() || email.isEmpty()) {
+                if (password.isEmpty() || email.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                     builder.setMessage(R.string.signup_error_message)
                             .setTitle(R.string.signup_error_title)

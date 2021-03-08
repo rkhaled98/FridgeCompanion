@@ -7,7 +7,9 @@ import androidx.core.content.ContextCompat;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
     public static String barcode_text;
     ZXingScannerView scannerView;
     public Food item;
+    String key = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,11 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
         setContentView(R.layout.activity_barcode);
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
+
+        Bundle b = getIntent().getExtras();
+        if(b!= null){
+            key = b.getString("FRIDGE_KEY");
+        }
     }
 
     @Override
@@ -40,26 +48,50 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
         barcode_text = result.getText();
         //search barcode in EDAMAM
         EdamamService.searchBarcode(barcode_text, new Callback() {
+            //Notify user to check Internet if getting response failed.
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext()
+                                , "No Internet! Please check connections"
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                });
+                finish();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 item = EdamamService.processResults(response);
                 try {
-                    FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
-                    Food food = new Food();
-                    food.setFoodName(item.getFoodName());
-                    food.setCalories(item.getCalories());
-                    food.setImage(item.getImage());
-                    firebaseDatasource.addItemToUser(food);
-                    Log.d("check","added" + item.getFoodName() + item.getImage());
+
+//                    Food food = new Food();
+//                    food.setFoodName(item.getFoodName());
+//                    food.setCalories(item.getCalories());
+//                    food.setImage(item.getImage());
+//                    food.setNutrition(item.getNutrition());
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(ItemEntryActivity.FOODNAME,item.getFoodName());
+                    returnIntent.putExtra(ItemEntryActivity.CALORIES,item.getCalories());
+                    returnIntent.putExtra(ItemEntryActivity.IMAGE,item.getImage());
+                    returnIntent.putExtra(ItemEntryActivity.NUTRITION,item.getNutrition());
+                    setResult(Activity.RESULT_OK,returnIntent);
+                    Log.d("checkk","added" + item.getFoodName() + item.getImage()+item.getCalories()+item.getNutrition());
                     Log.d("check",item.getId());
                     Log.d("check",item.getFoodName());
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                //Check if the database returns item info. Use manual entry if not.
+                if(item.getFoodName().isEmpty()){
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext()
+                                    , "Items Not Found in database. Please enter manually."
+                                    , Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
                 finish();
             }
