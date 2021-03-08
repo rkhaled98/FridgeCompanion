@@ -251,7 +251,6 @@ public class HomeFragment extends Fragment {
                         Bundle b = new Bundle();
                         Log.d(TAG, "creating new bundle for the food with the key" + food.getFirebaseKey());
                         b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
-
                         b.putString(BundleKeys.FOOD_NAME_KEY, food.getFoodName());
                         b.putString(BundleKeys.FOOD_IMAGE_KEY, food.getImage());
                         b.putInt(BundleKeys.FOOD_QUANTITY_KEY, food.getQuantity());
@@ -267,8 +266,9 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(getContext(), ItemViewActivity.class);
-                        Food food = foodAdapter.getItem(position);
+                        Food food = foodAdapter2.getItem(position);
                         Bundle b = new Bundle();
+                        b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
                         b.putString(BundleKeys.FOOD_NAME_KEY, food.getFoodName());
                         b.putString(BundleKeys.FOOD_IMAGE_KEY, food.getImage());
                         b.putInt(BundleKeys.FOOD_QUANTITY_KEY, food.getQuantity());
