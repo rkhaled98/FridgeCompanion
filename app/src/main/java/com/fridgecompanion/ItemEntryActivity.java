@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +46,8 @@ public class ItemEntryActivity extends AppCompatActivity {
     public String imageUrl;
     public Food tempItem = new Food();
 
+    private String fridgeID;
+
     Calendar expireDate = Calendar.getInstance();
     Calendar purchaseDate = Calendar.getInstance();
 
@@ -67,6 +70,11 @@ public class ItemEntryActivity extends AppCompatActivity {
         purchaseEdit.setText(DateFormat.format(formatDate, purchaseDate.getTime()).toString());
 
         food = new Food();
+
+        Bundle b = getIntent().getExtras();
+        if (b != null){
+            fridgeID = b.getString("FRIDGE_KEY");
+        }
 
     }
 
@@ -201,8 +209,14 @@ public class ItemEntryActivity extends AppCompatActivity {
             saveFoodFromEntry();
             //attach food to firebase here
             FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
-            firebaseDatasource.addItemToUser(food);
-            Toast.makeText(getApplicationContext(), "Item Added", Toast.LENGTH_SHORT).show();
+
+            if (!fridgeID.isEmpty()){
+                firebaseDatasource.addItemToFridgeId(food, fridgeID);
+                Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
+            }
+
             finish();
         }
     }
