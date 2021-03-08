@@ -74,6 +74,7 @@ public class ItemEntryActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if (b != null){
             fridgeID = b.getString("FRIDGE_KEY");
+            food.setFirebaseFridgeId(fridgeID);
         }
 
     }
@@ -272,7 +273,7 @@ public class ItemEntryActivity extends AppCompatActivity {
         if(!isEmptyEditText(calorieEdit)){
             food.setCalories(Double.parseDouble(calorieEdit.getText().toString()));
         }
-        if(!imageUrl.isEmpty()){
+        if(imageUrl!= null && !imageUrl.isEmpty()){
             food.setImage(imageUrl);
         }
 

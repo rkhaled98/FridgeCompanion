@@ -1,8 +1,9 @@
 package com.fridgecompanion;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Food {
+public class Food implements Serializable {
 
     public static int UNIT_COUNT = 0;
     public static int UNIT_PERCENTAGE = 1;
@@ -11,6 +12,24 @@ public class Food {
     public static int UNIT_MILLILITER = 4;
     public static int UNIT_NONE = 5;
 
+    @Override
+    public String toString() {
+        return "Food{" +
+                "quantity=" + quantity +
+                ", unit=" + unit +
+                ", foodName='" + foodName + '\'' +
+                ", enteredDate=" + enteredDate +
+                ", expireDate=" + expireDate +
+                ", id='" + id + '\'' +
+                ", firebaseKey='" + firebaseKey + '\'' +
+                ", firebaseFridgeId='" + firebaseFridgeId + '\'' +
+                ", image='" + image + '\'' +
+                ", calories=" + calories +
+                ", foodDescription='" + foodDescription + '\'' +
+                ", nutrition='" + nutrition + '\'' +
+                '}';
+    }
+
     private int quantity;
     private int unit;
     private String foodName;
@@ -18,6 +37,8 @@ public class Food {
     private long expireDate;
     //Food ID, image url, and calories from database
     private String id;
+    private String firebaseKey;
+    private String firebaseFridgeId;
     private String image;
     private double calories;
     private String foodDescription;
@@ -103,25 +124,29 @@ public class Food {
 
     public void setCalories(double calories){this.calories = calories;}
 
-    @Override
-    public String toString() {
-        return "Food{" +
-                "quantity=" + quantity +
-                ", unit=" + unit +
-                ", foodName='" + foodName + '\'' +
-                ", enteredDate=" + enteredDate +
-                ", expireDate=" + expireDate +
-                ", id='" + id + '\'' +
-                ", image='" + image + '\'' +
-                ", calories=" + calories +
-                ", foodDescription='" + foodDescription + '\'' +
-                '}';
-    }
+
     public String getNutrition() {
         return nutrition;
     }
 
     public void setNutrition(String nutrition) {
         this.nutrition = nutrition;
+    }
+
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
+    }
+
+
+    public String getFirebaseFridgeId() {
+        return firebaseFridgeId;
+    }
+
+    public void setFirebaseFridgeId(String firebaseFridgeId) {
+        this.firebaseFridgeId = firebaseFridgeId;
     }
 }
