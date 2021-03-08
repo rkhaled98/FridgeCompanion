@@ -45,6 +45,7 @@
                 android:scaleType="fitXY"
                 android:src = "@drawable/ic_baseline_delete_24"
                 android:background="#FFFFFF"
+                android:id="@+id/trash_button"
                 android:contentDescription="@string/trash_button_image_des" />
         </androidx.cardview.widget.CardView>
 

@@ -9,12 +9,19 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 public class ItemViewActivity extends AppCompatActivity {
+
+    private ImageButton buttonDelete;
+    FirebaseDatasource firebaseDatasource;
+    private String TAG = "firebasehomefragment";
+    Food food;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +37,30 @@ public class ItemViewActivity extends AppCompatActivity {
         final TextView foodCal = (TextView) findViewById((R.id.food_calories));
         final TextView foodQuantity = (TextView) findViewById((R.id.amount_left));
 
-        //retrieve from bundle and store in food
-        Food food = null;
+        buttonDelete = (ImageButton) findViewById(R.id.trash_button);
+
         Bundle b = getIntent().getExtras();
         if (b!= null){
-            food = retrieveFromBundle(b);
+            food = (Food) b.getSerializable(BundleKeys.FOOD_OBJECT_KEY);
+            Log.d(TAG, "food has been set with the id: " + food.getFirebaseKey());
         }else{
             food = new Food();
         }
+
+
+
+        try {
+            firebaseDatasource = new FirebaseDatasource(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        //retrieve from bundle and store in food
+
+
 
         foodName.setText(food.getFoodName());
         foodDes.setText(food.getFoodDescription());
@@ -49,6 +72,24 @@ public class ItemViewActivity extends AppCompatActivity {
         if (!food.getImage().isEmpty()) {
             Picasso.get().load(food.getImage()).into(foodImage);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Log.d(TAG, "deleting this food: " + food.getFirebaseKey() + food.toString());
+                    firebaseDatasource.removeItemByFridgeId(food, food.getFirebaseFridgeId());
+                    finish();
+                } catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "could not remove the item", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private Food retrieveFromBundle(Bundle b){

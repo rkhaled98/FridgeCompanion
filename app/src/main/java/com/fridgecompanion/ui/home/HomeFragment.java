@@ -93,7 +93,9 @@ public class HomeFragment extends Fragment {
             firebaseDatasource.getItemsReferenceByFridgeId(fridgeID).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    foods.add(snapshot.getValue(Food.class));
+                    Food foodToAdd = snapshot.getValue(Food.class);
+                    foodToAdd.setFirebaseKey(snapshot.getKey());
+                    foods.add(foodToAdd);
                     if (gv.getVisibility() == GridView.GONE){
                         foodAdapter.notifyDataSetChanged();
                     }else {
@@ -162,6 +164,19 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                    // coming from firebase
+                    Food foodToRemove = snapshot.getValue(Food.class);
+//                    foods.remove(foodToRemove);
+
+                    foods.removeIf(item -> item.getFirebaseKey().equals(snapshot.getKey()));
+
+//                    Log.d(TAG, "attempting remove from adapter:" + foodToRemove.toString() + foods.contains(foodToRemove) + foods.get(0).toString());
+
+                    if (gv.getVisibility() == GridView.GONE){
+                        foodAdapter.notifyDataSetChanged();
+                    }else {
+                        foodAdapter2.notifyDataSetChanged();
+                    }
 
                 }
 
@@ -234,6 +249,9 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), ItemViewActivity.class);
                         Food food = foodAdapter.getItem(position);
                         Bundle b = new Bundle();
+                        Log.d(TAG, "creating new bundle for the food with the key" + food.getFirebaseKey());
+                        b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
+
                         b.putString(BundleKeys.FOOD_NAME_KEY, food.getFoodName());
                         b.putString(BundleKeys.FOOD_IMAGE_KEY, food.getImage());
                         b.putInt(BundleKeys.FOOD_QUANTITY_KEY, food.getQuantity());
