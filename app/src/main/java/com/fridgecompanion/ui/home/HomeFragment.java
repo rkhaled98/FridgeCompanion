@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment {
 
                     foods.removeIf(item -> item.getFirebaseKey().equals(snapshot.getKey()));
 
-                    Log.d(TAG, "attempting remove from adapter:" + foodToRemove.toString() + foods.contains(foodToRemove) + foods.get(0).toString());
+//                    Log.d(TAG, "attempting remove from adapter:" + foodToRemove.toString() + foods.contains(foodToRemove) + foods.get(0).toString());
 
                     if (gv.getVisibility() == GridView.GONE){
                         foodAdapter.notifyDataSetChanged();
