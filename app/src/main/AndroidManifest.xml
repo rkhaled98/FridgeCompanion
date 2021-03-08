@@ -26,6 +26,8 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AfterSignInActivity" />
         <activity android:name=".BarcodeScanner" />
+        <activity android:name=".ui.setting.ProfileActivity"/>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -34,7 +36,7 @@
 
     <uses-feature android:name="android.hardware.Camera.autofocus" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 </manifest>

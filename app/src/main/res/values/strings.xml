@@ -42,4 +42,16 @@
     <string name="food_image">Food Image</string>
     <string name="first_name_hint">First Name</string>
     <string name="last_name_hint">Last Name</string>
+
+    <string name="account_preferences">Account Preferences</string>
+    <string name="user_profile_title">User Profile</string>
+    <string name="user_profile_summary">Edit Profile</string>
+    <string name="profile_photo_file_name">stock_user_picture.png</string>
+    <string name="default_profile_photo_file_name">beef.jpeg</string>
+    <string name="notification_settings_title">Notification Settings</string>
+    <string name="notification_on_off">Turn notifications off?</string>
+    <string name="logout_summary">Sign out of your account</string>
+    <string name="profile_save_button_text">Save Changes</string>
+    <string name="profile_cancel_button_text">Cancel</string>
+
 </resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:addStatesFromChildren="false"
+        android:title="@string/account_preferences">
+
+        <PreferenceScreen
+            android:key="user_profile"
+            android:title="@string/user_profile_title"
+            android:summary="@string/user_profile_summary">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.fridgecompanion.ui.setting"
+                android:targetClass="com.fridgecompanion.ui.setting.ProfileActivity"/>
+
+        </PreferenceScreen>
+
+        <Preference
+            android:title="@string/action_logout"
+            android:key="@string/action_logout"
+            android:summary="@string/logout_summary"/>
+    </PreferenceCategory>
+
+    <!-- Notification Settings -->
+    <PreferenceCategory
+        android:title="@string/notification_settings_title">
+        <CheckBoxPreference
+            android:key="key_notification_on_off"
+            android:title="@string/notification_on_off">
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
