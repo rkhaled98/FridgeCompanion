@@ -93,6 +93,8 @@ public class ItemEntryActivity extends AppCompatActivity {
                 noteEdit.setText(food.getFoodDescription());
                 spinner.setSelection(food.getUnit());
                 imageUrl = food.getImage();
+                expireDate.setTimeInMillis(food.getExpireDate());
+                purchaseDate.setTimeInMillis(food.getEnteredDate());
                 Picasso.get().load(imageUrl).into(imageView);
             }
         }
