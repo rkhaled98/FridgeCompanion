@@ -1,11 +1,15 @@
 package com.fridgecompanion;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +20,22 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.cloudinary.Transformation;
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.UploadRequest;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
+import com.cloudinary.android.preprocess.BitmapEncoder;
+import com.cloudinary.android.preprocess.DimensionsValidator;
+import com.cloudinary.android.preprocess.ImagePreprocessChain;
+import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -27,11 +43,25 @@ import okhttp3.Response;
 
 public class ItemEntryActivity extends AppCompatActivity {
     private final String formatDate = "MM.dd.yyyy";
-    public static final int LAUNCH_BARCODE = 1;
+    public static final int LAUNCH_BARCODE = 0;
     public static final String FOODNAME = "name";
     public static final String IMAGE = "image";
     public static final String CALORIES = "calories";
     public static final String NUTRITION = "nutrition";
+
+    //For Image
+    private String tempImgFileName = "profile.jpg";
+    private String tempImgFileName2 = "temp.jpg";
+    private String tempImgFileName3 = "crop.jpg";
+    private Uri tempImgUri;
+    private Uri profileImgUri;
+    private Uri cropImgUri;
+    private int cropStatus = 0;
+    public static final String TAG = "test";
+    public static final int CAMERA_REQUEST_CODE = 1;
+    public static final int GALLERY_REQUEST_CODE = 2;
+    public static final String LOCATION_KEY = "location key";
+    private String location;
 
     EditText nameEdit;
     EditText quantityEdit;
@@ -45,6 +75,7 @@ public class ItemEntryActivity extends AppCompatActivity {
 
     public Food food;
     public String imageUrl;
+    public String tempImageUrl;
     public Food tempItem = new Food();
 
     private String fridgeID;
@@ -57,7 +88,15 @@ public class ItemEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MediaManager.init(this);
         setContentView(R.layout.activity_item_entry);
+        UiUtils.checkPermission(this);
+        File profileImgFile = new File(getExternalFilesDir(null), tempImgFileName);
+        File tempImgFile = new File(getExternalFilesDir(null), tempImgFileName2);
+        File cropImgFile = new File(getExternalFilesDir(null), tempImgFileName3);
+        profileImgUri = FileProvider.getUriForFile(this, "com.fridgecompanion", profileImgFile);
+        tempImgUri = FileProvider.getUriForFile(this, "com.fridgecompanion", tempImgFile);
+        cropImgUri = FileProvider.getUriForFile(this, "com.fridgecompanion", cropImgFile);
 
         nameEdit = (EditText)findViewById(R.id.name_edit);
         quantityEdit = (EditText)findViewById(R.id.quantity_edit);
@@ -115,12 +154,6 @@ public class ItemEntryActivity extends AppCompatActivity {
     //Search item name in the Edamam database
     public void onClickButtonSearch(View view){
         searchDatabasebyName(nameEdit.getText().toString());
-//        nameEdit.setText(tempItem.getFoodName());
-//        int data_cal = (int) tempItem.getCalories();
-//        calorieEdit.setText(String.valueOf(data_cal));
-//        nutritionEdit.setText(tempItem.getNutrition());
-//        imageUrl = tempItem.getImage();
-//        Picasso.get().load(imageUrl).into(imageView);
     }
 
     public void searchDatabasebyName(String name) {
@@ -143,10 +176,18 @@ public class ItemEntryActivity extends AppCompatActivity {
                 tempItem = EdamamService.processResults(response);
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(getApplicationContext()
-                                , "No Internet! Please check connections"
-                                , Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext()
+//                                , "Searching..."
+//                                , Toast.LENGTH_SHORT).show();
+                        nameEdit.setText(tempItem.getFoodName());
+                        int data_cal = (int) tempItem.getCalories();
+                        calorieEdit.setText(String.valueOf(data_cal));
+                        nutritionEdit.setText(tempItem.getNutrition());
+                        imageUrl = tempItem.getImage();
+                        imageView.setRotation(0);
+                        Picasso.get().load(imageUrl).into(imageView);
                     }
+
                 });
                 //Check if the database returns item info. Use manual entry if not.
                 if(tempItem.getFoodName().isEmpty()){
@@ -160,6 +201,7 @@ public class ItemEntryActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     public void onClickExpireDate(View view){
@@ -215,12 +257,35 @@ public class ItemEntryActivity extends AppCompatActivity {
                 calorieEdit.setText(String.valueOf(data_cal));
                 nutritionEdit.setText(bundle.getString(NUTRITION));
                 imageUrl = bundle.getString(IMAGE);
+                imageView.setRotation(0);
                 Picasso.get().load(imageUrl).into(imageView);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
             }
         }
+        //For image
+        else{
+            if (resultCode != RESULT_OK) return;
+            if (requestCode == CAMERA_REQUEST_CODE) {
+                Crop.of(tempImgUri, cropImgUri).asSquare().start(this);
+                Log.d("hz","CropStarted");
+            } else if((requestCode == GALLERY_REQUEST_CODE)){
+                this.tempImgUri = data.getData();
+                Crop.of(tempImgUri, cropImgUri).asSquare().start(this);
+                Log.d("hz","CropStarted_Gallery");
+
+            }else if (requestCode == Crop.REQUEST_CROP) {
+                Uri tempUri = Crop.getOutput(data);
+                imageView.setRotation(90);
+                imageView.setImageURI(null);
+                imageView.setImageURI(tempUri);
+                cropStatus = 1;
+                //location = tempImgUri.getPath();
+                location =tempUri.getPath();
+            }
+        }
+
     }
 
     public void onClickLeftButton(View view){
@@ -229,35 +294,42 @@ public class ItemEntryActivity extends AppCompatActivity {
 
     public void onClickSaveButton(View view) throws Exception {
         if(validEntry()){
-            saveFoodFromEntry();
-            //attach food to firebase here
-            FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
-            if(editMode == 0){
-                //adding new fridge mode
-                if (!fridgeID.isEmpty()){
-                    firebaseDatasource.addItemToFridgeId(food, fridgeID);
-                    Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
-                }
+            if(cropStatus==0){
+                Log.d("hz",cropStatus+"");
+                saveFoodFromEntry();
+                //attach food to firebase here
+                FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
+                if(editMode == 0){
+                    //adding new fridge mode
+                    if (!fridgeID.isEmpty()){
+                        firebaseDatasource.addItemToFridgeId(food, fridgeID);
+                        Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
+                    }
 
-                finish();
-            }else{
-                //editing fridge mode
-                if(!food.getFirebaseFridgeId().isEmpty() && !food.getFirebaseKey().isEmpty()){
-                    firebaseDatasource.editItemToFridgeId(food, food.getFirebaseFridgeId(), food.getFirebaseKey());
-                }else {
-                    Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
+                    finish();
+                }else{
+                    //editing fridge mode
+                    if(!food.getFirebaseFridgeId().isEmpty() && !food.getFirebaseKey().isEmpty()){
+                        firebaseDatasource.editItemToFridgeId(food, food.getFirebaseFridgeId(), food.getFirebaseKey());
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
+                    }
+                    // Build a result intent and post it back.
+                    Intent resultIntent = new Intent();
+                    Bundle b = new Bundle();
+                    b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
+                    resultIntent.putExtras(b);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
                 }
-                // Build a result intent and post it back.
-                Intent resultIntent = new Intent();
-                Bundle b = new Bundle();
-                b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
-                resultIntent.putExtras(b);
-                setResult(RESULT_OK, resultIntent);
-                finish();
-
             }
+            else{
+                Log.d("hz","imageupload");
+                imageUpload();
+            }
+
         }
     }
 
@@ -301,6 +373,12 @@ public class ItemEntryActivity extends AppCompatActivity {
         food.setUnit(spinner.getSelectedItemPosition());
         food.setQuantity(Integer.parseInt(quantityEdit.getText().toString()));
 
+        if(imageUrl!= null && !imageUrl.isEmpty()){
+                food.setImage(imageUrl);
+        }
+
+        Log.d("checkstore1",imageUrl);
+
 
         //optional entry
         if(!isEmptyEditText(noteEdit)){
@@ -312,12 +390,131 @@ public class ItemEntryActivity extends AppCompatActivity {
         if(!isEmptyEditText(calorieEdit)){
             food.setCalories(Double.parseDouble(calorieEdit.getText().toString()));
         }
-        if(imageUrl!= null && !imageUrl.isEmpty()){
-            food.setImage(imageUrl);
-        }
+
 
     }
 
+    /** Methods for adding images: taking pictures, selecting images from gallery, and cropping */
+//When clicking on Change to take a picture
+    public void OnClickNewImage(View view) {
+        cropStatus=0;
+        tempImageUrl = null;
+        CameraDialog dialog = new CameraDialog();
+        dialog.show(getSupportFragmentManager(), TAG);
+    }
+
+    public void choosePhotoMethod(int which){
+        if(which==0) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempImgUri);
+            try {
+                // Trigger the cropping activity
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
+            //startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        }
+        else if(which==1){
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempImgUri);
+            photoPickerIntent.putExtra("return-data", true);
+
+            try {
+                // Trigger the cropping activity
+                startActivityForResult(photoPickerIntent, GALLERY_REQUEST_CODE);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
+            //startActivityForResult(photoPickerIntent, CAMERA_REQUEST_CODE);
+        }
+    }
+
+    public void imageUpload(){
+        //Save Image
+        File profileImgFile = new File(getExternalFilesDir(null), tempImgFileName);
+        File tempImgFile = new File(getExternalFilesDir(null), tempImgFileName2);
+        File cropImgFile = new File(getExternalFilesDir(null), tempImgFileName3);
+        if (cropStatus == 1) {
+            profileImgFile.delete();
+            tempImgFile.delete();
+            profileImgFile = new File(getExternalFilesDir(null), tempImgFileName);
+            cropImgFile.renameTo(profileImgFile);
+            location = profileImgUri.getPath();
+        }
+        MediaManager.get().upload(location).unsigned("fridgeupload").preprocess(
+                ImagePreprocessChain.limitDimensionsChain(300,300).
+                        addStep(new DimensionsValidator(10,10,300,300)).saveWith(
+                        new BitmapEncoder(BitmapEncoder.Format.JPEG, 50))).callback(
+                                new UploadCallback() {
+            @Override
+            public void onStart(String requestId) {
+
+            }
+
+            @Override
+            public void onProgress(String requestId, long bytes, long totalBytes) {
+
+            }
+
+            @Override
+            public void onSuccess(String requestId, Map resultData) {
+                String tempUrl = (String) resultData.get("url");
+
+                tempUrl = "https://res.cloudinary.com/foreverzhang98/image/upload/a_90/"+tempUrl.substring(54);
+                imageUrl = tempUrl;
+                Log.d("checkstore",tempUrl);
+                //food.setImage(imageUrl);
+                saveFoodFromEntry();
+                //attach food to firebase here
+                FirebaseDatasource firebaseDatasource = null;
+                try {
+                    firebaseDatasource = new FirebaseDatasource(getApplicationContext());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(editMode == 0){
+                    //adding new fridge mode
+                    if (!fridgeID.isEmpty()){
+                        firebaseDatasource.addItemToFridgeId(food, fridgeID);
+                        Log.d("checkstore11",food.getImage());
+                        Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
+                    }
+
+                    finish();
+                }else{
+                    //editing fridge mode
+                    if(!food.getFirebaseFridgeId().isEmpty() && !food.getFirebaseKey().isEmpty()){
+                        firebaseDatasource.editItemToFridgeId(food, food.getFirebaseFridgeId(), food.getFirebaseKey());
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
+                    }
+                    // Build a result intent and post it back.
+                    Intent resultIntent = new Intent();
+                    Bundle b = new Bundle();
+                    b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
+                    resultIntent.putExtras(b);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }
+
+            }
+
+            @Override
+            public void onError(String requestId, ErrorInfo error) {
+
+            }
+
+            @Override
+            public void onReschedule(String requestId, ErrorInfo error) {
+
+            }
+        }).startNow(getApplicationContext());
+    }
 
 
 
