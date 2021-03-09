@@ -1,11 +1,14 @@
 package com.fridgecompanion;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -16,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -25,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected EditText firstNameEditText;
     protected EditText lastNameEditText;
     private FirebaseAuth mFirebaseAuth;
+    private Context mContext;
 
     private String TAG = "firebasesignin";
 
@@ -32,6 +38,8 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        mContext = this;
 
         getWindow().setNavigationBarColor(ResourcesCompat.getColor(getResources(), R.color.fridge_blue, null));
 
@@ -66,15 +74,39 @@ public class SignUpActivity extends AppCompatActivity {
                     dialog.show();
                 } else {
                     Log.d(TAG, password + email);
+                    String finalFirstName = firstName;
+                    String finalLastName = lastName;
                     mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Intent intent = new Intent(SignUpActivity.this, AfterSignInActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
+                                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(finalFirstName + " " + finalLastName)
+                                                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                                .build();
+
+                                        if (user != null) {
+                                            user.updateProfile(profileUpdates)
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Intent intent = new Intent(SignUpActivity.this, AfterSignInActivity.class);
+                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                startActivity(intent);
+
+                                                                Log.d(TAG, user.getDisplayName());
+                                                            }
+                                                        }
+                                                    });
+                                        } else {
+                                            Toast.makeText(mContext, "Could not make user!", Toast.LENGTH_SHORT).show();
+                                        }
+
                                     } else {
                                         Log.d(TAG, task.getException().toString() + "," + task.getException().getMessage());
                                         AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
