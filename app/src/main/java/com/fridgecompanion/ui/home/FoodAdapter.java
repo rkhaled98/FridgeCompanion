@@ -1,6 +1,7 @@
 package com.fridgecompanion.ui.home;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import com.fridgecompanion.Food;
 import com.fridgecompanion.R;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -37,7 +41,18 @@ public class FoodAdapter extends ArrayAdapter<Food> {
 
     @Override
     public int getCount() {
-        return foods.size();
+        if(viewMode == LIST_MODE){
+            return foods.size();
+        }
+        return Math.max(12, foods.size()+(3-foods.size()%3)%3);
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        if(position < foods.size()){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -53,7 +68,6 @@ public class FoodAdapter extends ArrayAdapter<Food> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
-        Food food = this.foods.get(position);
         if (view == null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             view = layoutInflater.inflate(resourceLayout, null);
@@ -61,18 +75,34 @@ public class FoodAdapter extends ArrayAdapter<Food> {
 
         final ImageView foodImage = (ImageView) view.findViewById(R.id.food_image);
 
-        if (!food.getImage().isEmpty()) {
-            Picasso.get().load(food.getImage()).into(foodImage);
+        if (position < foods.size()){
+            Food food = this.foods.get(position);
+            if (!food.getImage().isEmpty()) {
+                Picasso.get().load(food.getImage()).into(foodImage);
+            }else{
+                ;
+            }
+
+            if (viewMode == LIST_MODE){
+                final TextView foodName = (TextView) view.findViewById(R.id.food_title);
+                final TextView foodDate = (TextView) view.findViewById(R.id.expire_date);
+                final TextView foodLeftOver = (TextView)view.findViewById(R.id.amount_left);
+                foodName.setText(food.getFoodName());
+
+                long currentTime =Calendar.getInstance().getTimeInMillis();
+                foodDate.setText(food.getDaysFromExpirationString(currentTime));
+                foodLeftOver.setText(food.getQuantityString());
+
+                if(food.getDaysFromExpiration(currentTime)<4){
+                    foodDate.setTextColor(Color.parseColor("#ff0000"));
+                }else{
+                    foodDate.setTextColor(Color.parseColor("#808080"));
+                }
+            }
         }else{
-            foodImage.setImageResource(R.drawable.beef);
+            ;
         }
 
-        if (viewMode == LIST_MODE){
-            final TextView foodName = (TextView) view.findViewById(R.id.food_title);
-            final TextView foodDate = (TextView) view.findViewById(R.id.expire_date);
-            foodName.setText(food.getFoodName());
-            foodDate.setText("Expired");
-        }
         return view;
     }
 }

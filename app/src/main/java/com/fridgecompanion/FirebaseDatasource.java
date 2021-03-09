@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -150,7 +152,44 @@ public class FirebaseDatasource {
 
                     }
                 });
-//        mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
+    }
+
+    public void editItemToFridgeId(Food food, String fridgeId, String foodId) {
+        mDatabase.child("fridges").child(fridgeId).child("items")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(foodId)){
+                            dataSnapshot.child(foodId).getRef().setValue(food);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    public void removeItemByFridgeId(Food food, String fridgeId) {
+        try {
+            Log.d(TAG, "attempting delete: " + food.getFirebaseKey());
+            mDatabase.child("fridges").child(fridgeId).child("items").child(food.getFirebaseKey()).removeValue();
+        } catch (Exception e) {
+        }
+
+//        mDatabase.child("fridges").child(fridgeId)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        dataSnapshot.getRef().child("items").push().setValue(food);
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
     }
 
     public void setUserNames(String firstName, String lastName){

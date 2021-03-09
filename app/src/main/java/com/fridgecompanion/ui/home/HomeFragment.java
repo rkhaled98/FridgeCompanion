@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -101,7 +102,9 @@ public class HomeFragment extends Fragment {
             firebaseDatasource.getItemsReferenceByFridgeId(fridgeID).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    foods.add(snapshot.getValue(Food.class));
+                    Food foodToAdd = snapshot.getValue(Food.class);
+                    foodToAdd.setFirebaseKey(snapshot.getKey());
+                    foods.add(foodToAdd);
                     if (gv.getVisibility() == GridView.GONE){
                         foodAdapter.notifyDataSetChanged();
                     }else {
@@ -135,7 +138,16 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    foods.add(snapshot.getValue(Food.class));
+                    Food food = snapshot.getValue(Food.class);
+                    int index = IntStream.range(0, foods.size())
+                            .filter(i -> foods.get(i).getFirebaseKey().equals(food.getFirebaseKey()))
+                            .findFirst().orElse(-1);
+                    if (index != -1){
+                        foods.set(index, food);
+                    }else{
+
+                    }
+
                     if (gv.getVisibility() == GridView.GONE){
                         foodAdapter.notifyDataSetChanged();
                     }else {
@@ -170,6 +182,19 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                    // coming from firebase
+                    Food foodToRemove = snapshot.getValue(Food.class);
+//                    foods.remove(foodToRemove);
+
+                    foods.removeIf(item -> item.getFirebaseKey().equals(snapshot.getKey()));
+
+//                    Log.d(TAG, "attempting remove from adapter:" + foodToRemove.toString() + foods.contains(foodToRemove) + foods.get(0).toString());
+
+                    if (gv.getVisibility() == GridView.GONE){
+                        foodAdapter.notifyDataSetChanged();
+                    }else {
+                        foodAdapter2.notifyDataSetChanged();
+                    }
 
                 }
 
@@ -242,6 +267,8 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), ItemViewActivity.class);
                         Food food = foodAdapter.getItem(position);
                         Bundle b = new Bundle();
+                        Log.d(TAG, "creating new bundle for the food with the key" + food.getFirebaseKey());
+                        b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
                         b.putString(BundleKeys.FOOD_NAME_KEY, food.getFoodName());
                         b.putString(BundleKeys.FOOD_IMAGE_KEY, food.getImage());
                         b.putInt(BundleKeys.FOOD_QUANTITY_KEY, food.getQuantity());
@@ -257,8 +284,9 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(getContext(), ItemViewActivity.class);
-                        Food food = foodAdapter.getItem(position);
+                        Food food = foodAdapter2.getItem(position);
                         Bundle b = new Bundle();
+                        b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
                         b.putString(BundleKeys.FOOD_NAME_KEY, food.getFoodName());
                         b.putString(BundleKeys.FOOD_IMAGE_KEY, food.getImage());
                         b.putInt(BundleKeys.FOOD_QUANTITY_KEY, food.getQuantity());

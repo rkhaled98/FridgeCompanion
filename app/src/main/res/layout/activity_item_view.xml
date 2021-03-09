@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    tools:context=".ItemViewActivity"
+    android:background="@color/fridge_blue">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F1F4F7"
-        tools:context=".ItemViewActivity"
+        android:layout_height="wrap_content"
         android:paddingTop="30dp">
 
         <androidx.cardview.widget.CardView
@@ -45,6 +45,7 @@
                 android:scaleType="fitXY"
                 android:src = "@drawable/ic_baseline_delete_24"
                 android:background="#FFFFFF"
+                android:id="@+id/trash_button"
                 android:contentDescription="@string/trash_button_image_des" />
         </androidx.cardview.widget.CardView>
 
@@ -104,11 +105,10 @@
                 android:layout_marginTop="6dp"
                 android:src = "@drawable/ic_baseline_access_time_24"/>
             <TextView
-                android:id="@+id/expire_date"
+                android:id="@+id/leftover_days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/time_icon"
-                android:text = "Expired"
                 android:padding="3dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -127,31 +127,63 @@
                 />
 
             <TextView
-                android:id="@+id/food_description"
+                android:id="@+id/food_calories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/time_icon"
-                android:layout_marginVertical="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="20dp"
+                android:textSize="18sp"
+                android:textColor="#808080"
+               />
+
+
+            <TextView
+                android:id="@+id/food_nutrition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/food_calories"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="20dp"
+                android:textSize="18sp"
+                android:textColor="#808080" />
+            <TextView
+                android:id="@+id/food_purchase_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/food_nutrition"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="20dp"
+                android:textSize="18sp"
+                android:textColor="#808080" />
+            <TextView
+                android:id="@+id/food_expire_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/food_purchase_date"
+                android:layout_marginVertical="10dp"
                 android:layout_marginStart="20dp"
                 android:textSize="18sp"
                 android:textColor="#808080" />
 
-
             <TextView
-                android:id="@+id/food_calories"
+                android:id="@+id/food_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/food_description"
+                android:layout_below="@id/food_expire_date"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="20dp"
                 android:textSize="18sp"
                 android:textColor="#808080" />
 
             <Button
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/food_calories"
-                android:text="Edit" />
+                android:layout_below="@id/food_notes"
+                android:text="Edit"
+                android:onClick="onClickEdit"/>
 
         </RelativeLayout>
 
