@@ -45,13 +45,6 @@ public class AfterSignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            FirebaseDatasource firebaseDatasource = new FirebaseDatasource(this);
-            Log.d("firebasename", firebaseDatasource.getDisplayName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         setContentView(R.layout.activity_start);
 
         mListView = (ListView) findViewById(R.id.listview);
