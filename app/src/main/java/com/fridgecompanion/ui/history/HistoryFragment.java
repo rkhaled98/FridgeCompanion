@@ -28,7 +28,7 @@ import com.fridgecompanion.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class HistoryFragment extends Fragment implements View.OnClickListener {
+public class HistoryFragment extends Fragment {
 
     private HistoryViewModel historyViewModel;
     private ArrayList<Food> foodList;
@@ -43,14 +43,14 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         foodList = new ArrayList<Food>(3);
         // TODO: update based on cloud data
-        for (int i = 0; i < foodNames.length; i++) {
-            Food food = new Food();
-            food.setFoodName(foodNames[i]);
-            DateAndTime = Calendar.getInstance();
-            long now = DateAndTime.getTimeInMillis();
-            food.setEnteredDate(now);
-            foodList.add(food);
-        }
+//        for (int i = 0; i < foodNames.length; i++) {
+//            Food food = new Food();
+//            food.setFoodName(foodNames[i]);
+//            DateAndTime = Calendar.getInstance();
+//            long now = DateAndTime.getTimeInMillis();
+//            food.setEnteredDate(now);
+//            foodList.add(food);
+//        }
     }
 
     @Override
@@ -62,25 +62,7 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
         context = view.getContext();
         updateHistory();
 
-        // SHow and tell 2
-        Button bt1 = (Button) view.findViewById(R.id.id_inv_low);
-        bt1.setOnClickListener(this);
-        Button bt2 = (Button) view.findViewById(R.id.id_exp_soon);
-        bt2.setOnClickListener(this);
-
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.id_inv_low) {
-            FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_INVENTORY_LOW);
-            Toast.makeText(context, "inventory notification sent", Toast.LENGTH_SHORT).show();
-        }
-        else if (v.getId() == R.id.id_exp_soon) {
-            FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON);
-            Toast.makeText(context, "expiration notification sent", Toast.LENGTH_SHORT).show();
-        }
     }
 
     /**
