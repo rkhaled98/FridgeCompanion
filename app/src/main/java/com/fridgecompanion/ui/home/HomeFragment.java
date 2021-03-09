@@ -228,11 +228,16 @@ public class HomeFragment extends Fragment {
             copyLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("not sure what this label does", fridgeID);
-                    clipboard.setPrimaryClip(clip);
+                    if (fridgeID == null || fridgeID.isEmpty()) {
+                        Toast.makeText(getActivity(), "Could not copy invite code!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("not sure what this label does", fridgeID);
+                        clipboard.setPrimaryClip(clip);
 
-                    Toast.makeText(getActivity(), "Fridge invite code copied to clipboard", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Fridge invite code copied to clipboard", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             });
 
