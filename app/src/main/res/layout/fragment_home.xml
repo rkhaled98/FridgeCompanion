@@ -36,26 +36,59 @@
                 />
         </androidx.cardview.widget.CardView>
 
-        <!--grid button-->
-        <androidx.cardview.widget.CardView
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
             android:layout_alignParentEnd="true"
-            android:elevation="20dp"
-            android:layout_marginEnd="15dp"
             android:layout_centerVertical="true"
-            android:id="@+id/view_button_container">
-            <ImageButton
-                android:id="@+id/view_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding = "8dp"
-                android:scaleType="fitXY"
-                android:src = "@drawable/ic_baseline_grid_on_24"
-                android:background="#FFFFFF"
-                android:contentDescription="@string/trash_button_image_des" />
-        </androidx.cardview.widget.CardView>
+            >
+            <!--        clip link -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:elevation="20dp"
+                android:layout_marginEnd="15dp"
+                android:id="@+id/link_button_container">
+                <ImageButton
+                    android:id="@+id/link_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding = "8dp"
+                    android:scaleType="fitXY"
+                    android:src = "@drawable/ic_baseline_content_copy_24"
+                    android:background="#FFFFFF"
+                    android:contentDescription="@string/trash_button_image_des" />
+            </androidx.cardview.widget.CardView>
+
+
+            <!--grid button-->
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:elevation="20dp"
+                android:layout_marginEnd="15dp"
+                android:id="@+id/view_button_container">
+                <ImageButton
+                    android:id="@+id/view_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding = "8dp"
+                    android:scaleType="fitXY"
+                    android:src = "@drawable/ic_baseline_grid_on_24"
+                    android:background="#FFFFFF"
+                    android:contentDescription="@string/trash_button_image_des" />
+            </androidx.cardview.widget.CardView>
+
+
+
+
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/fridge_name_text"
