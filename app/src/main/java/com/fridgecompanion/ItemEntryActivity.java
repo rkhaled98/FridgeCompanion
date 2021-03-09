@@ -309,7 +309,6 @@ public class ItemEntryActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
                     }
 
-                    finish();
                 }else{
                     //editing fridge mode
                     if(!food.getFirebaseFridgeId().isEmpty() && !food.getFirebaseKey().isEmpty()){
@@ -317,14 +316,8 @@ public class ItemEntryActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
                     }
-                    // Build a result intent and post it back.
-                    Intent resultIntent = new Intent();
-                    Bundle b = new Bundle();
-                    b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
-                    resultIntent.putExtras(b);
-                    setResult(RESULT_OK, resultIntent);
-                    finish();
                 }
+                finish();
             }
             else{
                 Log.d("hz","imageupload");
@@ -379,7 +372,6 @@ public class ItemEntryActivity extends AppCompatActivity {
                 food.setImage(imageUrl);
                 Log.d("checkstore1", imageUrl);
         }
-
 
         //optional entry
         if(!isEmptyEditText(noteEdit)){

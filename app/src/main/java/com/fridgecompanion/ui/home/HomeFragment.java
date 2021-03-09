@@ -118,30 +118,6 @@ public class HomeFragment extends Fragment {
                     }else {
                         foodAdapter2.notifyDataSetChanged();
                     }
-
-//                    if(foods.size() != 0){
-//                        backgroundImg.setVisibility(ImageView.GONE);
-//                    }else{
-//                        backgroundImg.setVisibility(ImageView.VISIBLE);
-//                    }
-
-//                    Fridge fridge = new Fridge();
-//
-//                    DataSnapshot items = snapshot.child("items");
-//                    Log.d(TAG, "before getting all items");
-//
-//                    for (DataSnapshot ds : items.getChildren()) {
-//                        Food food = ds.getValue(Food.class);
-//                        Log.d(TAG, food.toString());
-//                        fridge.addItem(food);
-//                    }
-//
-//
-//                    Log.d(TAG, "after getting all items");
-////                    fridgeAdapter.add(fridge);
-//                    fridges.add(fridge);
-//
-//                    fridgeAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -161,31 +137,6 @@ public class HomeFragment extends Fragment {
                     }else {
                         foodAdapter2.notifyDataSetChanged();
                     }
-
-
-//                    if(foods.size() != 0){
-//                        backgroundImg.setVisibility(ImageView.GONE);
-//                    }else{
-//                        backgroundImg.setVisibility(ImageView.VISIBLE);
-//                    }
-//                    Fridge fridge = new Fridge();
-//
-//                    fridges.clear();
-//
-//                    DataSnapshot items = snapshot.child("items");
-//                    Log.d(TAG, "before getting all items");
-//
-//                    for (DataSnapshot ds : items.getChildren()) {
-//                        Food food = ds.getValue(Food.class);
-//                        Log.d(TAG, food.toString());
-//                        fridge.addItem(food);
-//                    }
-//
-//                    Log.d(TAG, "after getting all items");
-////                    fridgeAdapter.add(fridge);
-//                    fridges.add(fridge);
-//
-//                    fridgeAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -217,9 +168,6 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-//            firebaseListAdapter = firebaseDatasource.getMyAdapter();
-//            firebaseListAdapter.startListening();
-//            lv.setAdapter(firebaseDatasource.getMyAdapter());
             backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
