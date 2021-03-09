@@ -88,7 +88,6 @@ public class ItemEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MediaManager.init(this);
         setContentView(R.layout.activity_item_entry);
         UiUtils.checkPermission(this);
         File profileImgFile = new File(getExternalFilesDir(null), tempImgFileName);
@@ -134,9 +133,11 @@ public class ItemEntryActivity extends AppCompatActivity {
                 imageUrl = food.getImage();
                 expireDate.setTimeInMillis(food.getExpireDate());
                 purchaseDate.setTimeInMillis(food.getEnteredDate());
-                Picasso.get().load(imageUrl).into(imageView);
+                //Picasso.get().load(imageUrl).into(imageView);
             }
         }
+        Log.d("test", food.getImage());
+        Picasso.get().load(food.getImage()).into(imageView);
 
     }
 
