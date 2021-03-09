@@ -376,9 +376,8 @@ public class ItemEntryActivity extends AppCompatActivity {
 
         if(imageUrl!= null && !imageUrl.isEmpty()){
                 food.setImage(imageUrl);
+                Log.d("checkstore1", imageUrl);
         }
-
-        Log.d("checkstore1",imageUrl);
 
 
         //optional entry

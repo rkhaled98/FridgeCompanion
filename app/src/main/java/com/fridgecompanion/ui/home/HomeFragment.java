@@ -326,6 +326,7 @@ public class HomeFragment extends Fragment {
      * Source: https://stackoverflow.com/questions/10748212/how-to-call-function-every-hour-also-how-can-i-loop-this
      */
     public void startNotificationTimer() {
+        Log.d(TAG, "In Timer");
         Timer timer = new Timer();
         TimerTask hourlyTask = new TimerTask() {
             @Override
@@ -337,6 +338,7 @@ public class HomeFragment extends Fragment {
                 }
                 // Check if notifications are on or off
                 if (!FridgeNotifications.areNotificationsOn(getContext())) {
+                    Log.d(TAG, "NOTIFS OFF");
                     return; // Return if notifications are off. No need to continue
                 }
                 // Iterate through all the food items in the fridge
@@ -360,7 +362,7 @@ public class HomeFragment extends Fragment {
             }
         };
         // Schedule the task to run starting now and then every hour...
-        timer.schedule(hourlyTask, 01, 1000*60*60); 
+        timer.schedule(hourlyTask, 01, 1000*60*60);
     }
 
 }
