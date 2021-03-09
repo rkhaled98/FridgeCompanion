@@ -77,7 +77,6 @@ public class FridgeNotifications {
      * Notes: Helper method to determine whether the user wants to receive notifications or not
      */
     public static boolean areNotificationsOn(Context context) {
-        PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         if (settings.getBoolean("key_notification_on_off", true)) {
             return false;
