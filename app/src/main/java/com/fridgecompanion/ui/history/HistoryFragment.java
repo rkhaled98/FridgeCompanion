@@ -1,6 +1,7 @@
 package com.fridgecompanion.ui.history;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +24,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.fridgecompanion.Action;
+import com.fridgecompanion.BundleKeys;
 import com.fridgecompanion.FirebaseDatasource;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.FridgeNotifications;
+import com.fridgecompanion.ItemViewActivity;
 import com.fridgecompanion.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,6 +54,8 @@ public class HistoryFragment extends Fragment{
     private final String TAG = "HistoryFragment";
     private HistoryListAdapter adapter;
     private String fridgeID;
+    private Bundle b = new Bundle();
+    private Intent intent;
     FirebaseDatasource firebaseDatasource;
 
 
@@ -72,6 +78,7 @@ public class HistoryFragment extends Fragment{
         listView = (GridView) view.findViewById(R.id.history_list);
         context = view.getContext();
         adapter = new HistoryListAdapter(getActivity(), R.layout.item_history, actionList);
+        intent = new Intent(getContext(), ItemViewActivity.class);
         listView.setAdapter(adapter);
         try {
             firebaseDatasource = new FirebaseDatasource(getContext());
@@ -80,6 +87,21 @@ public class HistoryFragment extends Fragment{
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     Action action = snapshot.getValue(Action.class);
+                    if (!action.getActionType().equals("deleted")){
+                        firebaseDatasource.getItemsReferenceByFridgeId(fridgeID).child(action.getFirebaseItemKey()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()) {
+                                    action.setFoodName(dataSnapshot.child("foodName").getValue(String.class));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
+                            }
+                        });
+                    }
                     actionList.push(action);
                     Collections.reverse(actionList);
                     adapter.notifyDataSetChanged();
@@ -108,6 +130,49 @@ public class HistoryFragment extends Fragment{
         } catch (Exception e) {
 
         }
+
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                        if(adapter.getItem(position).getActionType().equals("deleted")){
+                            Toast.makeText(getContext(), "Can't open! Deleted Item", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Food food = new Food();
+                            food.setFirebaseFridgeId(fridgeID);
+                            food.setFirebaseKey(adapter.getItem(position).getFirebaseItemKey());
+                            b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
+
+                            try {
+                                firebaseDatasource = new FirebaseDatasource(getContext());
+                                firebaseDatasource.getItemsReferenceByFridgeId(food.getFirebaseFridgeId()).child(food.getFirebaseKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Log.d("sjlee","From here");
+                                        if(dataSnapshot.exists()) {
+                                            intent.putExtras(b);
+                                            startActivity(intent);
+                                        }else{
+                                            Toast.makeText(getActivity().getApplicationContext(), "Can't open! Deleted Item", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        System.out.println("The read failed: " + databaseError.getCode());
+                                    }
+                                });
+
+                            } catch (Exception e) {
+                                Log.d("failed",e.toString());
+
+                            }
+                        }
+                    }
+                }
+        );
+
+
         return view;
     }
 
