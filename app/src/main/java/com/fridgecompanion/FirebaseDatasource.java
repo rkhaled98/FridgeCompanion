@@ -139,12 +139,14 @@ public class FirebaseDatasource {
         mDatabase.child("users").child(mUserId).child("fridgelist").child(FridgeId).setValue(FridgeName);
     }
 
-    public void addItemToFridgeId(Food food, String id) {
+    public String addItemToFridgeId(Food food, String id) {
+        final String[] key = new String[1];
         mDatabase.child("fridges").child(id)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        dataSnapshot.getRef().child("items").push().setValue(food);
+                        key[0] =  dataSnapshot.getRef().child("items").push().getKey();
+                        dataSnapshot.getRef().child("items").child(key[0]).setValue(food);
                     }
 
                     @Override
@@ -152,6 +154,7 @@ public class FirebaseDatasource {
 
                     }
                 });
+        return key[0];
     }
 
     public void editItemToFridgeId(Food food, String fridgeId, String foodId) {
@@ -192,9 +195,29 @@ public class FirebaseDatasource {
 //                });
     }
 
+    public void addActionByFridgeId(Action action, String fridgeId){
+        mDatabase.child("fridges").child(fridgeId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("history").push().setValue(action);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
     public void setUserNames(String firstName, String lastName){
         mDatabase.child("users").child(mUserId).child("firstname").setValue(firstName);
         mDatabase.child("users").child(mUserId).child("lastname").setValue(lastName);
 
+    }
+
+    public String getUserId(){
+        return this.mUserId;
     }
 }

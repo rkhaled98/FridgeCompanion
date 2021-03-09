@@ -303,13 +303,15 @@ public class ItemEntryActivity extends AppCompatActivity {
                 if(editMode == 0){
                     //adding new fridge mode
                     if (!fridgeID.isEmpty()){
-                        firebaseDatasource.addItemToFridgeId(food, fridgeID);
+                        String itemKey = firebaseDatasource.addItemToFridgeId(food, fridgeID);
+                        Log.d("testing", itemKey);
+                        Action addAction = new Action( firebaseDatasource.getUserId(), itemKey,  "added",  Calendar.getInstance().getTimeInMillis());
+                        firebaseDatasource.addActionByFridgeId(addAction, fridgeID);
                         Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
                     }
 
-                    finish();
                 }else{
                     //editing fridge mode
                     if(!food.getFirebaseFridgeId().isEmpty() && !food.getFirebaseKey().isEmpty()){
@@ -323,8 +325,8 @@ public class ItemEntryActivity extends AppCompatActivity {
                     b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
                     resultIntent.putExtras(b);
                     setResult(RESULT_OK, resultIntent);
-                    finish();
                 }
+                finish();
             }
             else{
                 Log.d("hz","imageupload");
@@ -378,7 +380,6 @@ public class ItemEntryActivity extends AppCompatActivity {
                 food.setImage(imageUrl);
         }
 
-        Log.d("checkstore1",imageUrl);
 
 
         //optional entry
