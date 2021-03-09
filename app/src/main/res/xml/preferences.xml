@@ -31,6 +31,16 @@
             android:key="key_notification_on_off"
             android:title="@string/notification_on_off">
         </CheckBoxPreference>
+        <ListPreference
+            android:key="key_notification_exp_list_pref"
+            android:title="@string/list_pref_notif_exp_title"
+            android:summary="@string/list_pref_notif_exp_summary"
+            android:entries="@array/exp_date_unit"
+            android:entryValues="@array/exp_date_val"
+            android:defaultValue="1"
+            android:dialogTitle="@string/notif_date">
+        </ListPreference>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

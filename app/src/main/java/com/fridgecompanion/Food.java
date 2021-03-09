@@ -51,9 +51,7 @@ public class Food implements Serializable {
     private double calories;
     private String foodDescription;
     private String nutrition;
-
-
-
+    private boolean needsNotification;
 
     public Food() {
         this.setDefaultValues();
@@ -70,7 +68,7 @@ public class Food implements Serializable {
         expireDate = Calendar.getInstance().getTimeInMillis();
         calories = 0;
         nutrition = "";
-
+        needsNotification = true;
     }
 
     public String getFoodDescription() {
@@ -206,5 +204,13 @@ public class Food implements Serializable {
 
     public int getDaysFromExpiration(long currentTime){
         return ((int)((expireDate/(24*60*60*1000)) -(int)(currentTime/(24*60*60*1000))));
+    }
+
+    public boolean getNeedsNotification() {
+        return needsNotification;
+    }
+
+    public void setNeedsNotification(boolean bool) {
+        this.needsNotification = bool;
     }
 }

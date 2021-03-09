@@ -85,6 +85,9 @@ public class FirebaseDatasource {
 
     }
 
+    public String getDisplayName() {
+        return mFirebaseAuth.getCurrentUser().getDisplayName();
+    }
 
     public void addItemToFridge(Food food) {
         mDatabase.child("users").child(mUserId).child("fridges").orderByKey().limitToFirst(1)

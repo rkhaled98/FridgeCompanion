@@ -40,6 +40,7 @@ import java.util.stream.IntStream;
 
 public class HistoryFragment extends Fragment{
 
+
     private HistoryViewModel historyViewModel;
     private Stack<Action> actionList;
     private Context context;
@@ -61,6 +62,7 @@ public class HistoryFragment extends Fragment{
         if (b != null){
             fridgeID = b.getString("FRIDGE_KEY");
         }
+
     }
 
     @Override
@@ -106,88 +108,9 @@ public class HistoryFragment extends Fragment{
         } catch (Exception e) {
 
         }
-//        updateHistory();
-
-//        // SHow and tell 2
-//        Button bt1 = (Button) view.findViewById(R.id.id_inv_low);
-//        bt1.setOnClickListener(this);
-//        Button bt2 = (Button) view.findViewById(R.id.id_exp_soon);
-//        bt2.setOnClickListener(this);
-
         return view;
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        if (v.getId() == R.id.id_inv_low) {
-//            FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_INVENTORY_LOW);
-//            Toast.makeText(context, "inventory notification sent", Toast.LENGTH_SHORT).show();
-//        }
-//        else if (v.getId() == R.id.id_exp_soon) {
-//            FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON);
-//            Toast.makeText(context, "expiration notification sent", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-//
-//    /**
-//     * @Override Method: onCreateOptionsMenu
-//     * Notes: Create the clickable menu item to allow the user to delete all history entries
-//     */
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.delete_all, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-//
-//    /**
-//     * @Override Method: onOptionsItemSelected
-//     * Notes: When the menu item is clicked, delete all history entries
-//     */
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_delete:
-//                new Thread(() -> {
-//                    // Delete history
-//
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Toast.makeText(getContext(), "Deleted history", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                }).start();
-//                break;
-//            default:
-//                // Not supposed to be here
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    /**
-//     * Method: updateHistory
-//     * Notes: Update the history entries displayed to the user
-//     */
-//    public void updateHistory() {
-//        new Thread(() -> {
-//            // Do stuff
-//
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    HistoryListAdapter historyListAdapter = new HistoryListAdapter(getContext(), foodList);
-//                    listView.setAdapter(historyListAdapter);
-//                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            // Do something when clicked
-//                        }
-//                    });
-//                }
-//            });
-//        }).start();
-//    }
 
     @Override
     public void onDestroy() {

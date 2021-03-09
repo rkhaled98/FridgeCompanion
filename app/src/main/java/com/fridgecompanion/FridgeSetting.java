@@ -11,6 +11,7 @@ public class FridgeSetting {
         notifyDates = 2;
         notifyOn = false;
     }
+
     public void setOwnerId(String ownerId) {
         ownerId = ownerId;
     }
