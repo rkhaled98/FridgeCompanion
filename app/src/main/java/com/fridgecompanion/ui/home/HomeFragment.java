@@ -1,5 +1,7 @@
 package com.fridgecompanion.ui.home;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +61,7 @@ public class HomeFragment extends Fragment {
     private List<Fridge> fridges;
     private List<Food> foods;
     private ImageButton viewButton;
+    private ImageButton copyLinkButton;
     private String fridgeID;
     private String fridgeName;
 
@@ -71,6 +75,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         viewButton = (ImageButton) view.findViewById(R.id.view_button);
+
+        copyLinkButton = (ImageButton) view.findViewById(R.id.link_button);
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);
 
@@ -218,6 +224,23 @@ public class HomeFragment extends Fragment {
                     getActivity().finish();
                 }
             });
+
+            copyLinkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (fridgeID == null || fridgeID.isEmpty()) {
+                        Toast.makeText(getActivity(), "Could not copy invite code!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("not sure what this label does", fridgeID);
+                        clipboard.setPrimaryClip(clip);
+
+                        Toast.makeText(getActivity(), "Fridge invite code copied to clipboard", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
             viewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
