@@ -187,6 +187,7 @@ public class ItemEntryActivity extends AppCompatActivity {
                         imageUrl = tempItem.getImage();
                         imageView.setRotation(0);
                         Picasso.get().load(imageUrl).into(imageView);
+                        cropStatus=0;
                     }
 
                 });
@@ -260,6 +261,7 @@ public class ItemEntryActivity extends AppCompatActivity {
                 imageUrl = bundle.getString(IMAGE);
                 imageView.setRotation(0);
                 Picasso.get().load(imageUrl).into(imageView);
+                cropStatus=0;
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

@@ -1,6 +1,7 @@
 package com.fridgecompanion;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.firebase.ui.database.FirebaseListOptions;
 import com.fridgecompanion.ui.home.FoodAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -223,12 +226,29 @@ public class FirebaseDatasource {
     }
 
     public void setUserNames(String firstName, String lastName){
-        mDatabase.child("users").child(mUserId).child("firstname").setValue(firstName);
-        mDatabase.child("users").child(mUserId).child("lastname").setValue(lastName);
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(firstName+" "+lastName).build();
+        mFirebaseUser.updateProfile(profileUpdates);
 
     }
 
     public String getUserId(){
         return this.mUserId;
+    }
+
+    //Save and get profile pic url
+    public void saveProfilePicToUser(String ProfilePicUrl){
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(Uri.parse(ProfilePicUrl)).build();
+        mFirebaseUser.updateProfile(profileUpdates);
+    }
+    public Uri getProfilePicFromUser(){
+        Uri photoUrl = null;
+        if(mFirebaseUser!=null){
+            for(UserInfo profile : mFirebaseUser.getProviderData()){
+                photoUrl = profile.getPhotoUrl();
+            }
+        }
+        return photoUrl;
     }
 }
