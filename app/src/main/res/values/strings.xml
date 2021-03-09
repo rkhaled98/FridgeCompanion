@@ -54,5 +54,21 @@
     <string name="logout_summary">Sign out of your account</string>
     <string name="profile_save_button_text">Save Changes</string>
     <string name="profile_cancel_button_text">Cancel</string>
+    <string name="list_pref_notif_exp_title">Expiration Date Notification Settings</string>
+    <string name="list_pref_notif_exp_summary">Choose how early you would like to be notified when food is about to expire</string>
+
+    <string-array name="exp_date_unit">
+        <item>1 Day</item>
+        <item>2 Days</item>
+        <item>3 Days</item>
+    </string-array>
+
+    <string-array name="exp_date_val">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string name="notif_date">Notification Date</string>
 
 </resources>

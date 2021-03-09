@@ -373,6 +373,7 @@ public class ItemEntryActivity extends AppCompatActivity {
         food.setExpireDate(expireDate.getTimeInMillis());
         food.setUnit(spinner.getSelectedItemPosition());
         food.setQuantity(Integer.parseInt(quantityEdit.getText().toString()));
+        food.setNeedsNotification(true);
 
         if(imageUrl!= null && !imageUrl.isEmpty()){
                 food.setImage(imageUrl);
