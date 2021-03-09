@@ -1,6 +1,5 @@
 package com.fridgecompanion.ui.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +26,6 @@ import com.fridgecompanion.BundleKeys;
 import com.fridgecompanion.FirebaseDatasource;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.Fridge;
-import com.fridgecompanion.FridgeNotifications;
 import com.fridgecompanion.ItemViewActivity;
 import com.fridgecompanion.R;
 import com.google.firebase.database.ChildEventListener;
@@ -35,12 +33,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class HomeFragment extends Fragment {
 
@@ -59,7 +53,6 @@ public class HomeFragment extends Fragment {
     private List<Food> foods;
     private ImageButton viewButton;
     private String fridgeID;
-    private String fridgeName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,7 +85,6 @@ public class HomeFragment extends Fragment {
             fridgeID = b.getString("FRIDGE_KEY");
             TextView tv = (TextView)view.findViewById(R.id.fridge_name_text);
             tv.setText(b.getString("FRIDGE_NAME"));
-            fridgeName = b.getString("FRIDGE_NAME");
         }
         Log.d("test", fridgeID);
 
@@ -245,7 +237,7 @@ public class HomeFragment extends Fragment {
 
         }
 
-        startNotificationTimer();
+
         return view;
     }
 
@@ -319,48 +311,4 @@ public class HomeFragment extends Fragment {
 //        DBReader dbreader = new DBReader();
 //        dbreader.start();
     }
-
-    /**
-     * Method: startNotificationTimer
-     * Notes: Checks specific requirements to send notifications on a timer
-     * Source: https://stackoverflow.com/questions/10748212/how-to-call-function-every-hour-also-how-can-i-loop-this
-     */
-    public void startNotificationTimer() {
-        Timer timer = new Timer();
-        TimerTask hourlyTask = new TimerTask() {
-            @Override
-            public void run() {
-                // Check for null context
-                Context context = getContext();
-                if (null == context) {
-                    return;
-                }
-                // Check if notifications are on or off
-                if (!FridgeNotifications.areNotificationsOn(getContext())) {
-                    return; // Return if notifications are off. No need to continue
-                }
-                // Iterate through all the food items in the fridge
-                for (int i = 0; i < foods.size(); i++) {
-                    Log.d(TAG, "No notification for index" + i);
-                    // If a food item is almost expiring, fire notification, no need to further check...
-                    Date expirationDate = new Date(foods.get(i).getExpireDate());
-                    Date now = Calendar.getInstance().getTime();
-                    if (null ==  expirationDate || 0 == foods.get(i).getExpireDate()) {
-                        continue;
-                    }
-                    int difference = (int) ( (now.getTime() - expirationDate.getTime()) / (1000 * 60 *60 *24));
-                    // Check hit
-                    if (Math.abs(difference) < 1) {
-                        // Fire notification
-                        FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON, foods.get(i), fridgeName);
-                        Log.d(TAG, "SENT NOTIFICATION");
-                        return;
-                    }
-                }
-            }
-        };
-        // Schedule the task to run starting now and then every hour...
-        timer.schedule(hourlyTask, 01, 1000*60*60); 
-    }
-
 }

@@ -3,7 +3,6 @@ package com.fridgecompanion.ui.setting;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -29,7 +28,6 @@ public class SettingFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Logout button
         Preference button = findPreference(getString(R.string.action_logout));
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
