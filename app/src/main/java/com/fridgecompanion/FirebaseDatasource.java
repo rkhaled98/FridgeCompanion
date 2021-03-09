@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -139,14 +140,16 @@ public class FirebaseDatasource {
         mDatabase.child("users").child(mUserId).child("fridgelist").child(FridgeId).setValue(FridgeName);
     }
 
-    public String addItemToFridgeId(Food food, String id) {
-        final String[] key = new String[1];
+    public void addItemToFridgeId(Food food, String id) {
         mDatabase.child("fridges").child(id)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        key[0] =  dataSnapshot.getRef().child("items").push().getKey();
-                        dataSnapshot.getRef().child("items").child(key[0]).setValue(food);
+                        String key =  dataSnapshot.getRef().child("items").push().getKey();
+                        dataSnapshot.getRef().child("items").child(key).setValue(food);
+                        Action addAction = new Action( mUserId, key,  "added",  Calendar.getInstance().getTimeInMillis());
+                        addAction.setFoodName(food.getFoodName());
+                        dataSnapshot.getRef().child("history").push().setValue(addAction);
                     }
 
                     @Override
@@ -154,16 +157,18 @@ public class FirebaseDatasource {
 
                     }
                 });
-        return key[0];
     }
 
     public void editItemToFridgeId(Food food, String fridgeId, String foodId) {
-        mDatabase.child("fridges").child(fridgeId).child("items")
+        mDatabase.child("fridges").child(fridgeId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChild(foodId)){
-                            dataSnapshot.child(foodId).getRef().setValue(food);
+                        if(dataSnapshot.child("items").hasChild(foodId)){
+                            dataSnapshot.child("items").child(foodId).getRef().setValue(food);
+                            Action editAction = new Action( mUserId, foodId,  "edited",  Calendar.getInstance().getTimeInMillis());
+                            editAction.setFoodName(food.getFoodName());
+                            dataSnapshot.getRef().child("history").push().setValue(editAction);
                         }
                     }
 
@@ -178,6 +183,9 @@ public class FirebaseDatasource {
         try {
             Log.d(TAG, "attempting delete: " + food.getFirebaseKey());
             mDatabase.child("fridges").child(fridgeId).child("items").child(food.getFirebaseKey()).removeValue();
+            Action deleteAction = new Action( mUserId, food.getFirebaseKey(),  "deleted",  Calendar.getInstance().getTimeInMillis());
+            deleteAction.setFoodName(food.getFoodName());
+            mDatabase.child("fridges").child(fridgeId).child("history").push().setValue(deleteAction);
         } catch (Exception e) {
         }
 

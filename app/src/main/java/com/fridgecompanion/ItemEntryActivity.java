@@ -303,10 +303,7 @@ public class ItemEntryActivity extends AppCompatActivity {
                 if(editMode == 0){
                     //adding new fridge mode
                     if (!fridgeID.isEmpty()){
-                        String itemKey = firebaseDatasource.addItemToFridgeId(food, fridgeID);
-                        Log.d("testing", itemKey);
-                        Action addAction = new Action( firebaseDatasource.getUserId(), itemKey,  "added",  Calendar.getInstance().getTimeInMillis());
-                        firebaseDatasource.addActionByFridgeId(addAction, fridgeID);
+                        firebaseDatasource.addItemToFridgeId(food, fridgeID);
                         Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Could not add item", Toast.LENGTH_SHORT).show();
@@ -319,12 +316,6 @@ public class ItemEntryActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
                     }
-                    // Build a result intent and post it back.
-                    Intent resultIntent = new Intent();
-                    Bundle b = new Bundle();
-                    b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
-                    resultIntent.putExtras(b);
-                    setResult(RESULT_OK, resultIntent);
                 }
                 finish();
             }

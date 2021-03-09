@@ -12,6 +12,7 @@ public class Action implements Serializable {
     private String firebaseUserID = "";
     private String firebaseItemKey = "";
     private String actionType = "";
+    private String foodName = "";
 
 
 
@@ -56,5 +57,13 @@ public class Action implements Serializable {
 
     public void setActionType(String actionType) {
         this.actionType = actionType;
+    }
+
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
     }
 }

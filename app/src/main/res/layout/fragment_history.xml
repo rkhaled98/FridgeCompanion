@@ -4,32 +4,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/tile_background"
     android:orientation="vertical"
-    tools:context=".ui.history.HistoryFragment">
-
-    <ListView
-        android:id="@+id/history_list"
+    android:paddingTop = "10dp">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="80dp">
 
-    <LinearLayout
+        <!--back button-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            android:elevation="20dp"
+            android:layout_marginStart="15dp"
+            android:id="@+id/back_button_container"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true">
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding = "10dp"
+                android:scaleType="fitXY"
+                android:src = "@drawable/ic_baseline_arrow_back_ios_new_24"
+                android:background="#FFFFFF"
+                android:contentDescription="@string/back_button_image_des"
+                android:onClick="onClickBack"
+                />
+        </androidx.cardview.widget.CardView>
+
+        <!--button that we might use, gone for now-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            android:layout_alignParentEnd="true"
+            android:elevation="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/view_button_container"
+            android:visibility="gone">
+            <ImageButton
+                android:id="@+id/view_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding = "8dp"
+                android:scaleType="fitXY"
+                android:src = "@drawable/ic_baseline_grid_on_24"
+                android:background="#FFFFFF"
+                android:contentDescription="@string/trash_button_image_des" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/fridge_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Log History"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
+    </RelativeLayout>
+
+    <GridView
+        android:layout_marginHorizontal="10dp"
+        android:id="@+id/history_list"
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/id_inv_low"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="notify inventory"/>
-
-        <Button
-            android:id="@+id/id_exp_soon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="notify expiration"/>
-    </LinearLayout>
+        android:numColumns="1"
+        android:verticalSpacing="10dp"/>
 
 </LinearLayout>

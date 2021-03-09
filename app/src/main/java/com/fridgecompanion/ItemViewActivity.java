@@ -1,11 +1,14 @@
 package com.fridgecompanion;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -13,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -55,21 +62,36 @@ public class ItemViewActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if (b!= null){
             food = (Food) b.getSerializable(BundleKeys.FOOD_OBJECT_KEY);
-            Log.d(TAG, "food has been set with the id: " + food.getFirebaseKey());
         }else{
             food = new Food();
         }
+    }
 
-
-
+    @Override
+    protected void onResume() {
         try {
             firebaseDatasource = new FirebaseDatasource(this);
+            firebaseDatasource.getItemsReferenceByFridgeId(food.getFirebaseFridgeId()).child(food.getFirebaseKey()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        food = dataSnapshot.getValue(Food.class);
+                        food.setFirebaseKey(dataSnapshot.getKey());
+                        updateInputWithFood();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("failed",e.toString());
+
         }
-
-        updateInputWithFood();
-
+        super.onResume();
     }
 
     private void updateInputWithFood(){
@@ -130,18 +152,11 @@ public class ItemViewActivity extends AppCompatActivity {
                 } catch (Exception e){
                     Toast.makeText(getApplicationContext(), "could not remove the item", Toast.LENGTH_SHORT).show();
                 }
+                finish();
             }
         });
     }
 
-    private Food retrieveFromBundle(Bundle b){
-        Food food = new Food();
-        food.setFoodName(b.getString(BundleKeys.FOOD_NAME_KEY, "" ));
-        food.setFoodDescription(b.getString(BundleKeys.FOOD_DESCRIPTION_KEY, "" ));
-        food.setQuantity(b.getInt(BundleKeys.FOOD_QUANTITY_KEY));
-        food.setImage(b.getString(BundleKeys.FOOD_IMAGE_KEY));
-        return food;
-    }
 
     public void onClickBack(View view){
         finish();
@@ -149,21 +164,9 @@ public class ItemViewActivity extends AppCompatActivity {
 
     public void onClickEdit(View view){
         Intent intent = new Intent(this, ItemEntryActivity.class);
-        intent.putExtras(getIntent().getExtras());
-        startActivityForResult(intent, BundleKeys.EDIT_FOOD_ENTRY);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BundleKeys.EDIT_FOOD_ENTRY){
-            if(resultCode == RESULT_OK){
-                if(data != null) {
-                    food = (Food) data.getExtras().getSerializable(BundleKeys.FOOD_OBJECT_KEY);
-                    updateInputWithFood();
-                }
-            }
-        }
+        Bundle b = getIntent().getExtras();
+        b.putSerializable(BundleKeys.FOOD_OBJECT_KEY, food);
+        intent.putExtras(b);
+        startActivity(intent);
     }
 }
