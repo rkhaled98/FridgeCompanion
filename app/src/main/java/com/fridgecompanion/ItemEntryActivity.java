@@ -317,12 +317,12 @@ public class ItemEntryActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
                     }
                 }
-                finish();
             }
             else{
                 Log.d("hz","imageupload");
                 imageUpload();
             }
+            finish();
 
         }
     }
@@ -486,8 +486,6 @@ public class ItemEntryActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Could not edit item", Toast.LENGTH_SHORT).show();
                     }
                 }
-                finish();
-
             }
 
             @Override
