@@ -2,6 +2,7 @@ package com.fridgecompanion.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.fridgecompanion.BundleKeys;
@@ -341,28 +343,59 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG, "NOTIFS OFF");
                     return; // Return if notifications are off. No need to continue
                 }
-                // Iterate through all the food items in the fridge
-                for (int i = 0; i < foods.size(); i++) {
-                    Log.d(TAG, "No notification for index" + i);
-                    // If a food item is almost expiring, fire notification, no need to further check...
-                    Date expirationDate = new Date(foods.get(i).getExpireDate());
-                    Date now = Calendar.getInstance().getTime();
-                    if (null ==  expirationDate || 0 == foods.get(i).getExpireDate()) {
-                        continue;
-                    }
-                    int difference = (int) ( (now.getTime() - expirationDate.getTime()) / (1000 * 60 *60 *24));
-                    // Check hit
-                    if (Math.abs(difference) < 1) {
-                        // Fire notification
-                        FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON, foods.get(i), fridgeName);
-                        Log.d(TAG, "SENT NOTIFICATION");
-                        return;
-                    }
-                }
+
+                timerIterateFood();
             }
         };
         // Schedule the task to run starting now and then every hour...
-        timer.schedule(hourlyTask, 01, 1000*60*60);
+        timer.schedule(hourlyTask, 01, 1000*60*60); // TODO: change to 1000*60*60 after all testing
+    }
+
+    public void timerIterateFood() {
+        // Iterate through all the food items in the fridge
+        for (int i = 0; i < foods.size(); i++) {
+            Food foodItem = foods.get(i);
+            Log.d(TAG, "No notification for index" + i);
+
+            // Check if we have already notified user about particular food item
+            if (!foodItem.getNeedsNotification()) {
+                Log.d(TAG, "already notified");
+                continue;
+            }
+
+            // If a food item is almost expiring, fire notification, no need to further check...
+            Date expirationDate = new Date(foodItem.getExpireDate());
+            Date now = Calendar.getInstance().getTime();
+            if (null ==  expirationDate || 0 == foodItem.getExpireDate()) {
+                continue;
+            }
+            int difference = (int) ( (now.getTime() - expirationDate.getTime()) / (1000 * 60 *60 *24));
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getContext());
+            String val = sharedPreferences.getString("key_notification_exp_list_pref", "1");
+            int days;
+            switch (val) {
+                case "2":
+                    days = 2;
+                    break;
+                case "3":
+                    days = 3;
+                    break;
+                default:
+                    days = 1;
+                    break;
+            }
+
+            // Check hit
+            if (Math.abs(difference) < days) {
+                // Fire notification
+                FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON, foodItem, fridgeName);
+                foodItem.setNeedsNotification(false);
+                firebaseDatasource.editItemToFridgeId(foodItem, foodItem.getFirebaseFridgeId(), foodItem.getFirebaseKey());
+                Log.d(TAG, "SENT NOTIFICATION");
+                return;
+            }
+        }
     }
 
 }
