@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.FridgeCompanion" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#ababfd</item>
+        <item name="colorPrimary">#6AB4FF</item>
         <item name="colorPrimaryVariant">@color/fridge_blue</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
