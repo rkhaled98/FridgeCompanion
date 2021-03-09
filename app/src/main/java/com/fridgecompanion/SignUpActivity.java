@@ -85,24 +85,19 @@ public class SignUpActivity extends AppCompatActivity {
 
                                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                 .setDisplayName(finalFirstName + " " + finalLastName)
-                                                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                                                 .build();
 
                                         if (user != null) {
-                                            user.updateProfile(profileUpdates)
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
-                                                                Intent intent = new Intent(SignUpActivity.this, AfterSignInActivity.class);
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                                startActivity(intent);
-
-                                                                Log.d(TAG, user.getDisplayName());
-                                                            }
-                                                        }
-                                                    });
+                                            try{
+                                                FirebaseDatasource f = new FirebaseDatasource(getBaseContext());
+                                                f.saveUserProfileInfo(finalFirstName + " " + finalLastName, "https://i.pinimg.com/originals/08/61/b7/0861b76ad6e3b156c2b9d61feb6af864.jpg");
+                                                Intent intent = new Intent(SignUpActivity.this, AfterSignInActivity.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                            }catch(Exception e){
+                                                Log.d("testing",e.toString());
+                                            }
                                         } else {
                                             Toast.makeText(mContext, "Could not make user!", Toast.LENGTH_SHORT).show();
                                         }

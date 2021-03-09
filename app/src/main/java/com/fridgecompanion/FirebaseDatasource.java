@@ -251,4 +251,20 @@ public class FirebaseDatasource {
         }
         return photoUrl;
     }
+
+    public void saveUserProfileInfo(String userName, String photoURL){
+        mDatabase.child("users").child(mUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("name").setValue(userName);
+                        dataSnapshot.getRef().child("profilePic").setValue(photoURL);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
 }

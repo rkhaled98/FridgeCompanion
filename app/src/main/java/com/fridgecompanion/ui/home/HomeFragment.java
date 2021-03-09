@@ -113,11 +113,11 @@ public class HomeFragment extends Fragment {
                     Food foodToAdd = snapshot.getValue(Food.class);
                     foodToAdd.setFirebaseKey(snapshot.getKey());
                     foods.add(foodToAdd);
-                    if (gv.getVisibility() == GridView.GONE){
-                        foodAdapter.notifyDataSetChanged();
-                    }else {
-                        foodAdapter2.notifyDataSetChanged();
-                    }
+
+                    foodAdapter.notifyDataSetChanged();
+
+                    foodAdapter2.notifyDataSetChanged();
+
                 }
 
                 @Override
@@ -132,11 +132,9 @@ public class HomeFragment extends Fragment {
 
                     }
 
-                    if (gv.getVisibility() == GridView.GONE){
-                        foodAdapter.notifyDataSetChanged();
-                    }else {
-                        foodAdapter2.notifyDataSetChanged();
-                    }
+                    foodAdapter.notifyDataSetChanged();
+                    foodAdapter2.notifyDataSetChanged();
+
                 }
 
                 @Override
@@ -149,11 +147,8 @@ public class HomeFragment extends Fragment {
 
 //                    Log.d(TAG, "attempting remove from adapter:" + foodToRemove.toString() + foods.contains(foodToRemove) + foods.get(0).toString());
 
-                    if (gv.getVisibility() == GridView.GONE){
-                        foodAdapter.notifyDataSetChanged();
-                    }else {
-                        foodAdapter2.notifyDataSetChanged();
-                    }
+                   foodAdapter.notifyDataSetChanged();
+                   foodAdapter2.notifyDataSetChanged();
 
                 }
 
