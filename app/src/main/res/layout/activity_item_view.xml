@@ -60,7 +60,9 @@
             android:layout_marginBottom="10dp"
             android:textStyle="bold"
             android:textSize="30sp"
-            android:layout_below="@id/trash_button_container"/>
+            android:layout_below="@id/trash_button_container"
+            android:maxLines="2"
+            android:ellipsize="end"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

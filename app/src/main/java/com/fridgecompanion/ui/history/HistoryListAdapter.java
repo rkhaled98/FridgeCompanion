@@ -73,7 +73,7 @@ public class HistoryListAdapter extends ArrayAdapter<Action> {
         // Load the text into the text view
         long millisecond = actionList.get(position).getActionTime();
         String date = new SimpleDateFormat("MM/dd HH:mm").format(new Date(millisecond));
-        firstRow.setText(String.format("%s %s %s to fridge", action.getUserName(), action.getActionType(), action.getFoodName()));
+        firstRow.setText(String.format("%s %s %s", action.getUserName(), action.getActionType(), action.getFoodName()));
         secondRow.setText(date);
         Picasso.get().load(action.getPhotoURL()).into(imgView);
 
