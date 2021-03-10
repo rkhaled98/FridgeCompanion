@@ -43,6 +43,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -119,9 +120,9 @@ public class HomeFragment extends Fragment {
                     Food foodToAdd = snapshot.getValue(Food.class);
                     foodToAdd.setFirebaseKey(snapshot.getKey());
                     foods.add(foodToAdd);
-
+                    Collections.sort(foods,
+                            (o1, o2) -> Long.compare(o1.getExpireDate(), o2.getExpireDate()));
                     foodAdapter.notifyDataSetChanged();
-
                     foodAdapter2.notifyDataSetChanged();
 
                 }
@@ -137,7 +138,8 @@ public class HomeFragment extends Fragment {
                     }else{
 
                     }
-
+                    Collections.sort(foods,
+                            (o1, o2) -> Long.compare(o1.getExpireDate(), o2.getExpireDate()));
                     foodAdapter.notifyDataSetChanged();
                     foodAdapter2.notifyDataSetChanged();
 
