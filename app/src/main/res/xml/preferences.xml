@@ -11,7 +11,7 @@
     <PreferenceCategory
         android:addStatesFromChildren="false"
         app:iconSpaceReserved="false"
-        app:allowDividerBelow="true"
+        app:titleTextColor="@color/fridge_blue"
         android:title="@string/account_preferences">
 
         <PreferenceScreen
@@ -42,7 +42,6 @@
     <!-- Notification Settings -->
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:allowDividerAbove="true"
         android:title="@string/notification_settings_title">
         <CheckBoxPreference
             app:iconSpaceReserved="false"

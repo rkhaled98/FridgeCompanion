@@ -38,17 +38,15 @@ public class FridgeNotifications {
      */
     public static void showNotification(Context context, int msg_type, Food foodItem, String fridgeName, String fridgeKey) {
         notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent intent = new Intent(context, AfterSignInActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         Bundle b = new Bundle();
         b.putString("FRIDGE_NAME", fridgeName);
         b.putString("FRIDGE_KEY", fridgeKey);
+        b.putBoolean("cat", true);
         intent.putExtras(b);
 
-        //PendingIntent pendingIntent = new NavDeepLinkBuilder(context).setGraph(R.navigation.mobile_navigation)
-          //      .setDestination(R.id.navigation_home).setArguments(b).createPendingIntent();
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID);
         notificationBuilder.setContentTitle("Fridge Companion");
