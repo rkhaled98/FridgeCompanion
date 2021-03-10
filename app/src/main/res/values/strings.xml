@@ -25,6 +25,8 @@
     <string name="title_activity_login">Sign in</string>
     <string name="add_item">Add New Item</string>
     <string name="action_logout">Logout</string>
+    <string name="action_leave_fridge">Leave Fridge</string>
+    <string name="action_leave_fridge_summary">Remove this fridge from your fridges</string>
     <string name="back_button_image_des">back button image</string>
     <string name="trash_button_image_des">trash button image</string>
     <string name="food_image_des">Food Image</string>

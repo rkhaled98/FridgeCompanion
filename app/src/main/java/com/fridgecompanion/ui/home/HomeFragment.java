@@ -64,6 +64,7 @@ public class HomeFragment extends Fragment {
     private List<Food> foods;
     private ImageButton viewButton;
     private ImageButton copyLinkButton;
+    private ImageButton leaveButton;
     private String fridgeID;
     private String fridgeName;
 
@@ -79,6 +80,8 @@ public class HomeFragment extends Fragment {
         viewButton = (ImageButton) view.findViewById(R.id.view_button);
 
         copyLinkButton = (ImageButton) view.findViewById(R.id.link_button);
+
+        leaveButton = (ImageButton) view.findViewById(R.id.leave_button);
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);
 
@@ -210,9 +213,18 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            leaveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseDatasource.removeFridgeFromUserlist(fridgeID);
+                    getActivity().finish();
+                }
+            });
         } catch (Exception e) {
 
         }
+
+
 
         startNotificationTimer();
         return view;
