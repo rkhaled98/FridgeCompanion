@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +28,9 @@ import com.cloudinary.android.preprocess.DimensionsValidator;
 import com.cloudinary.android.preprocess.ImagePreprocessChain;
 import com.fridgecompanion.BundleKeys;
 import com.fridgecompanion.FirebaseDatasource;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.soundcloud.android.crop.Crop;
 
 import com.fridgecompanion.R;
@@ -135,23 +139,29 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ProfilePicUri = firebaseDatasource.getProfilePicFromUser();
-        Log.d("hz", ProfilePicUri.toString());
 
-        if(ProfilePicUri==null){
-            // Default profile photo if no photo saved before
-            ProfilePicButton.setImageResource(R.drawable.stock_user_picture);
-            Log.d(TAG, "ERROR: Couldn't find the saved image");
-        }
-        else{
-            // Load saved profile photo
-            //FileInputStream fis = openFileInput(profilePicFileName);
-            //Bitmap bmap = BitmapFactory.decodeStream(fis);
-            Log.d("hz1", ProfilePicUri.toString());
-            //Bitmap bmap = MediaStore.Images.Media.getBitmap(this.getContentResolver() , ProfilePicUri);
+        firebaseDatasource.getProfilePicUrlReference().get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                }
+                else {
+                    String url = (String) task.getResult().getValue();
+                    if(url==null){
+                        // Default profile photo if no photo saved before
+                        ProfilePicButton.setImageResource(R.drawable.stock_user_picture);
+                        Log.d(TAG, "ERROR: Couldn't find the saved image");
+                    }
+                    else{
+                        // Load saved profile photo
+                        Picasso.get().load(url).into(ProfilePicButton);
 
-            Picasso.get().load(ProfilePicUri).into(ProfilePicButton);
-        }
+                    }
+                }
+            }
+        });
+
+
 //        try {
 //            // Load saved profile photo
 //            //FileInputStream fis = openFileInput(profilePicFileName);
@@ -279,7 +289,7 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Construct temporary image path and name to save the taken photo
         ContentValues values = new ContentValues(1);
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         ProfilePicUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, ProfilePicUri);
         intent.putExtra("return_data", true);
