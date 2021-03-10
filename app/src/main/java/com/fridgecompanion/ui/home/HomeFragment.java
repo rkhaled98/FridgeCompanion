@@ -35,6 +35,8 @@ import com.fridgecompanion.Fridge;
 import com.fridgecompanion.FridgeNotifications;
 import com.fridgecompanion.ItemViewActivity;
 import com.fridgecompanion.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -327,18 +329,16 @@ public class HomeFragment extends Fragment {
             }
         };
         // Schedule the task to run starting now and then every hour...
-        timer.schedule(hourlyTask, 01, 1000*10); // TODO: change to 1000*60*60 after all testing
+        timer.schedule(hourlyTask, 01, 6*1000*60*60);
     }
 
     public void timerIterateFood() {
         // Iterate through all the food items in the fridge
         for (int i = 0; i < foods.size(); i++) {
             Food foodItem = foods.get(i);
-            Log.d(TAG, "No notification for index" + i);
 
             // Check if we have already notified user about particular food item
             if (!foodItem.getNeedsNotification()) {
-                Log.d(TAG, "already notified");
                 continue;
             }
 
@@ -371,7 +371,6 @@ public class HomeFragment extends Fragment {
                 FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON, foodItem, fridgeName, fridgeID);
                 foodItem.setNeedsNotification(false);
                 firebaseDatasource.editItemToFridgeId(foodItem, foodItem.getFirebaseFridgeId(), foodItem.getFirebaseKey());
-                Log.d(TAG, "SENT NOTIFICATION");
                 return;
             }
         }

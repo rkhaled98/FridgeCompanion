@@ -1,5 +1,6 @@
 package com.fridgecompanion;
 
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.fridgecompanion.ui.home.HomeFragment;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentManager;
 
 public class AfterSignInActivity extends AppCompatActivity {
 
@@ -156,7 +159,6 @@ public class AfterSignInActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     public void onClickNewFridgeButton(View view){
