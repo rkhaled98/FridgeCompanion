@@ -131,7 +131,7 @@ public class AfterSignInActivity extends AppCompatActivity {
                         optionAdapter.notifyDataSetChanged();
 
                         int delta = getResources().getDimensionPixelSize(R.dimen.fridge_list_height);
-                        int height = getResources().getDimensionPixelSize(R.dimen.fridge_list_default_height) - fridgeNames.size()*delta;
+                        int height = getResources().getDimensionPixelSize(R.dimen.fridge_list_default_height) + fridgeNames.size()*delta;
                         ll.getLayoutParams().height = height;
                         ll.requestLayout();
                     } catch (Exception e) {
