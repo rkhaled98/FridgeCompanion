@@ -284,7 +284,6 @@ public class ItemEntryActivity extends AppCompatActivity {
                 imageView.setImageURI(null);
                 imageView.setImageURI(tempUri);
                 cropStatus = 1;
-                //location = tempImgUri.getPath();
                 location =tempUri.getPath();
             }
         }
