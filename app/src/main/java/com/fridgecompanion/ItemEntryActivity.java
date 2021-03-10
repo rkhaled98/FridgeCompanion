@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +38,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -99,6 +103,9 @@ public class ItemEntryActivity extends AppCompatActivity {
 
         nameEdit = (EditText)findViewById(R.id.name_edit);
         quantityEdit = (EditText)findViewById(R.id.quantity_edit);
+
+        quantityEdit.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(5,1)});
+
         purchaseEdit = (EditText)findViewById(R.id.purchase_edit);
         expireEdit = (EditText)findViewById(R.id.expire_edit);
         calorieEdit = (EditText)findViewById(R.id.calories_edit);
@@ -501,6 +508,25 @@ public class ItemEntryActivity extends AppCompatActivity {
         }).startNow(getApplicationContext());
     }
 
+//    https://stackoverflow.com/questions/17423483/how-to-limit-edittext-length-to-7-integers-and-2-decimal-places/21802109
+    class DecimalDigitsInputFilter implements InputFilter {
+
+        Pattern mPattern;
+
+        public DecimalDigitsInputFilter(int digitsBeforeZero,int digitsAfterZero) {
+            mPattern=Pattern.compile("[0-9]{0," + (digitsBeforeZero-1) + "}+((\\.[0-9]{0," + (digitsAfterZero-1) + "})?)||(\\.)?");
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            Matcher matcher=mPattern.matcher(dest);
+            if(!matcher.matches())
+                return "";
+            return null;
+        }
+
+    }
 
 
 }

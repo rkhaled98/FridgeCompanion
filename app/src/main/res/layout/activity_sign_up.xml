@@ -97,7 +97,8 @@
                 android:inputType="text"
                 android:backgroundTint="@color/black"
                 android:hint="@string/first_name_hint"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:maxLength="14"/>
             <EditText
                 android:id="@+id/lastNameField"
                 android:layout_width="0dp"
@@ -107,7 +108,8 @@
                 android:inputType="text"
                 android:backgroundTint="@color/black"
                 android:hint="@string/last_name_hint"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:maxLength="14"/>
         </LinearLayout>
         <Button
             android:id="@+id/signupButton"
