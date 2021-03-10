@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Fridge invite code copied to clipboard", Toast.LENGTH_SHORT).show();
         }
+        closeSubMenusFab();
 
     }
 
@@ -164,11 +165,13 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
+        closeSubMenusFab();
     }
 
     public void onClickSave(View view) {
         //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
         //.setAction("Action", null).show();
+        closeSubMenusFab();
         Bundle fridgeBundle = getIntent().getExtras();
 
         Intent intent = new Intent(getApplicationContext(), ItemEntryActivity.class);

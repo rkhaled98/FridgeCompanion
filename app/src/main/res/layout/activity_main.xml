@@ -4,6 +4,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/tile_background"
    >
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -127,7 +129,8 @@
         android:layout_marginEnd="22dp"
         android:layout_marginBottom="10dp"
         android:visibility="invisible"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"

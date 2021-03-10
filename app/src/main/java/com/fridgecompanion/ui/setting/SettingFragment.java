@@ -1,6 +1,7 @@
 package com.fridgecompanion.ui.setting;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,8 @@ public class SettingFragment extends PreferenceFragmentCompat {
         if (getContext() != null) {
             PreferenceManager.setDefaultValues(getContext(), R.xml.preferences, false);
         }
+
+
         Preference myPref = (Preference) findPreference("user_profile");
         myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -41,6 +44,7 @@ public class SettingFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
+
 
 //        Preference p = findPreference("custom_header");
 //        ImageView iv = (ImageView) getView().findViewById(R.id.profile_pic);
@@ -62,6 +66,9 @@ public class SettingFragment extends PreferenceFragmentCompat {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view =  super.onCreateView(inflater, container, savedInstanceState);
+        view.setBackgroundColor(Color.WHITE);
+        return view;
+
     }
 }

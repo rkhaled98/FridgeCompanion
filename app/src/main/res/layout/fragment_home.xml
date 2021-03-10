@@ -8,6 +8,7 @@
     android:background="@drawable/tile_background"
     android:orientation="vertical"
     android:paddingTop = "10dp"
+    android:animateLayoutChanges="true"
     >
 
     <RelativeLayout
