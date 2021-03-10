@@ -114,35 +114,11 @@ public class HomeFragment extends Fragment {
                     Food foodToAdd = snapshot.getValue(Food.class);
                     foodToAdd.setFirebaseKey(snapshot.getKey());
                     foods.add(foodToAdd);
-                    if (gv.getVisibility() == GridView.GONE){
-                        foodAdapter.notifyDataSetChanged();
-                    }else {
-                        foodAdapter2.notifyDataSetChanged();
-                    }
 
-//                    if(foods.size() != 0){
-//                        backgroundImg.setVisibility(ImageView.GONE);
-//                    }else{
-//                        backgroundImg.setVisibility(ImageView.VISIBLE);
-//                    }
+                    foodAdapter.notifyDataSetChanged();
 
-//                    Fridge fridge = new Fridge();
-//
-//                    DataSnapshot items = snapshot.child("items");
-//                    Log.d(TAG, "before getting all items");
-//
-//                    for (DataSnapshot ds : items.getChildren()) {
-//                        Food food = ds.getValue(Food.class);
-//                        Log.d(TAG, food.toString());
-//                        fridge.addItem(food);
-//                    }
-//
-//
-//                    Log.d(TAG, "after getting all items");
-////                    fridgeAdapter.add(fridge);
-//                    fridges.add(fridge);
-//
-//                    fridgeAdapter.notifyDataSetChanged();
+                    foodAdapter2.notifyDataSetChanged();
+
                 }
 
                 @Override
@@ -157,36 +133,9 @@ public class HomeFragment extends Fragment {
 
                     }
 
-                    if (gv.getVisibility() == GridView.GONE){
-                        foodAdapter.notifyDataSetChanged();
-                    }else {
-                        foodAdapter2.notifyDataSetChanged();
-                    }
+                    foodAdapter.notifyDataSetChanged();
+                    foodAdapter2.notifyDataSetChanged();
 
-
-//                    if(foods.size() != 0){
-//                        backgroundImg.setVisibility(ImageView.GONE);
-//                    }else{
-//                        backgroundImg.setVisibility(ImageView.VISIBLE);
-//                    }
-//                    Fridge fridge = new Fridge();
-//
-//                    fridges.clear();
-//
-//                    DataSnapshot items = snapshot.child("items");
-//                    Log.d(TAG, "before getting all items");
-//
-//                    for (DataSnapshot ds : items.getChildren()) {
-//                        Food food = ds.getValue(Food.class);
-//                        Log.d(TAG, food.toString());
-//                        fridge.addItem(food);
-//                    }
-//
-//                    Log.d(TAG, "after getting all items");
-////                    fridgeAdapter.add(fridge);
-//                    fridges.add(fridge);
-//
-//                    fridgeAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -199,11 +148,8 @@ public class HomeFragment extends Fragment {
 
 //                    Log.d(TAG, "attempting remove from adapter:" + foodToRemove.toString() + foods.contains(foodToRemove) + foods.get(0).toString());
 
-                    if (gv.getVisibility() == GridView.GONE){
-                        foodAdapter.notifyDataSetChanged();
-                    }else {
-                        foodAdapter2.notifyDataSetChanged();
-                    }
+                   foodAdapter.notifyDataSetChanged();
+                   foodAdapter2.notifyDataSetChanged();
 
                 }
 
@@ -218,9 +164,6 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-//            firebaseListAdapter = firebaseDatasource.getMyAdapter();
-//            firebaseListAdapter.startListening();
-//            lv.setAdapter(firebaseDatasource.getMyAdapter());
             backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

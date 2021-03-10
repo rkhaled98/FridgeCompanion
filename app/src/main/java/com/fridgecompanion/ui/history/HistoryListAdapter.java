@@ -4,9 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fridgecompanion.Action;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.R;
 
@@ -14,24 +17,32 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class HistoryListAdapter extends BaseAdapter {
+import androidx.annotation.NonNull;
 
-    private ArrayList<Food> foodList;
+public class HistoryListAdapter extends ArrayAdapter<Action> {
+
+    private List<Action> actionList;
     private Context context;
+    private int resourceLayout;
 
     /**
      * Method: HistoryListAdapter
      * Notes: Constructor
      */
-    public HistoryListAdapter(Context context, ArrayList<Food> foodList) {
+
+    public HistoryListAdapter(@NonNull Context context, int resource, @NonNull List<Action> objects) {
+        super(context, resource, objects);
         this.context = context;
-        this.foodList = foodList;
+        this.actionList = objects;
+        this.resourceLayout = resource;
     }
+
 
     @Override
     public int getCount() {
-        return foodList.size();
+        return actionList.size();
     }
 
     @Override
@@ -40,25 +51,27 @@ public class HistoryListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return foodList.get(position);
+    public Action getItem(int position) {
+        return actionList.get(position);
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         if (null == view) {
-            view = LayoutInflater.from(context).inflate(R.layout.my_custom_list_item,
-                    parent, false);
+            final LayoutInflater layoutInflater = LayoutInflater.from(context);
+            view = layoutInflater.inflate(resourceLayout, null);
         }
-
+        Action action = actionList.get(position);
         // Get the first row from the custom list layout
-        TextView firstRow = (TextView) view.findViewById(R.id.id_history_first_row);
+
+        TextView firstRow = (TextView) view.findViewById(R.id.item_text);
+        TextView secondRow = (TextView) view.findViewById(R.id.date_text);
 
         // Load the text into the text view
-        String foodName = foodList.get(position).getFoodName();
-        long millisecond = foodList.get(position).getEnteredDate();
-        String date = new SimpleDateFormat("MM/dd/yyy").format(new Date(millisecond));
-        firstRow.setText("User added " + foodName + " to fridge. " + date);
+        long millisecond = actionList.get(position).getActionTime();
+        String date = new SimpleDateFormat("MM/dd HH:mm").format(new Date(millisecond));
+        firstRow.setText("User "+action.getActionType()+ " "+ action.getFoodName() + " to fridge");
+        secondRow.setText(date);
 
         return view;
     }

@@ -1,6 +1,7 @@
 package com.fridgecompanion;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.firebase.ui.database.FirebaseListOptions;
 import com.fridgecompanion.ui.home.FoodAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -147,7 +151,12 @@ public class FirebaseDatasource {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        dataSnapshot.getRef().child("items").push().setValue(food);
+                        String key =  dataSnapshot.getRef().child("items").push().getKey();
+                        dataSnapshot.getRef().child("items").child(key).setValue(food);
+                        Action addAction = new Action( mUserId, key,  "added"
+                                ,  Calendar.getInstance().getTimeInMillis());
+                        addAction.setFoodName(food.getFoodName());
+                        dataSnapshot.getRef().child("history").push().setValue(addAction);
                     }
 
                     @Override
@@ -158,12 +167,16 @@ public class FirebaseDatasource {
     }
 
     public void editItemToFridgeId(Food food, String fridgeId, String foodId) {
-        mDatabase.child("fridges").child(fridgeId).child("items")
+        mDatabase.child("fridges").child(fridgeId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChild(foodId)){
-                            dataSnapshot.child(foodId).getRef().setValue(food);
+                        if(dataSnapshot.child("items").hasChild(foodId)){
+                            dataSnapshot.child("items").child(foodId).getRef().setValue(food);
+                            Action editAction = new Action( mUserId, foodId,  "edited"
+                                    ,  Calendar.getInstance().getTimeInMillis());
+                            editAction.setFoodName(food.getFoodName());
+                            dataSnapshot.getRef().child("history").push().setValue(editAction);
                         }
                     }
 
@@ -178,6 +191,10 @@ public class FirebaseDatasource {
         try {
             Log.d(TAG, "attempting delete: " + food.getFirebaseKey());
             mDatabase.child("fridges").child(fridgeId).child("items").child(food.getFirebaseKey()).removeValue();
+            Action deleteAction = new Action( mUserId, food.getFirebaseKey(),  "deleted"
+                    ,  Calendar.getInstance().getTimeInMillis());
+            deleteAction.setFoodName(food.getFoodName());
+            mDatabase.child("fridges").child(fridgeId).child("history").push().setValue(deleteAction);
         } catch (Exception e) {
         }
 
@@ -195,9 +212,80 @@ public class FirebaseDatasource {
 //                });
     }
 
-    public void setUserNames(String firstName, String lastName){
-        mDatabase.child("users").child(mUserId).child("firstname").setValue(firstName);
-        mDatabase.child("users").child(mUserId).child("lastname").setValue(lastName);
+    public void addActionByFridgeId(Action action, String fridgeId){
+        mDatabase.child("fridges").child(fridgeId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("history").push().setValue(action);
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+    public void setUserNames(String firstName, String lastName){
+        mDatabase.child("users").child(mUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("name").setValue(firstName+" "+lastName);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+    public String getUserId(){
+        return this.mUserId;
+    }
+
+    //Save and get profile pic url
+    public void saveProfilePicToUser(String ProfilePicUrl){
+        mDatabase.child("users").child(mUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("profilePic").setValue(ProfilePicUrl);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+    public Uri getProfilePicFromUser(){
+        Uri photoUrl = null;
+        if(mFirebaseUser!=null){
+            for(UserInfo profile : mFirebaseUser.getProviderData()){
+                photoUrl = profile.getPhotoUrl();
+            }
+        }
+        return photoUrl;
+    }
+
+    public void saveUserProfileInfo(String userName, String photoURL){
+        mDatabase.child("users").child(mUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("name").setValue(userName);
+                        dataSnapshot.getRef().child("profilePic").setValue(photoURL);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 }
