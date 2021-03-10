@@ -267,4 +267,8 @@ public class FirebaseDatasource {
                     }
                 });
     }
+
+    public DatabaseReference getReferenceByUserId(String userID){
+        return mDatabase.child("users").child(userID);
+    }
 }
