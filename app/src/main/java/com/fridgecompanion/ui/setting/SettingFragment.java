@@ -3,8 +3,14 @@ package com.fridgecompanion.ui.setting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -36,6 +42,12 @@ public class SettingFragment extends PreferenceFragmentCompat {
             }
         });
 
+//        Preference p = findPreference("custom_header");
+//        ImageView iv = (ImageView) getView().findViewById(R.id.profile_pic);
+//        TextView tv = (TextView)getView().findViewById(R.id.username_text);
+//        tv.setText("test");
+
+
         // Logout button
         Preference button = findPreference(getString(R.string.action_logout));
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -46,5 +58,10 @@ public class SettingFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 }
