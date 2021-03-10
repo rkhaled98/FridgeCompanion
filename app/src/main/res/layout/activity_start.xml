@@ -61,7 +61,8 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:layout_marginEnd="10dp"/>
+                    android:layout_marginEnd="10dp"
+                    android:maxLength="24"/>
                 <Button
                     android:id="@+id/ButtonNewFridge"
                     android:layout_width="wrap_content"
