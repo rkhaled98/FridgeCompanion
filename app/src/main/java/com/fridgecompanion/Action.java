@@ -13,18 +13,21 @@ public class Action implements Serializable {
     private String firebaseItemKey = "";
     private String actionType = "";
     private String foodName = "";
+    private String name="";
+    private String profilePicUrl="";
 
 
 
     public Action() {
 
     }
-
+//Need to add name and picUrl in constructor
     public Action(String firebaseUserID, String firebaseItemKey, String actionType, long actionTime) {
         this.actionTime =actionTime;
         this.firebaseItemKey = firebaseItemKey;
         this.firebaseUserID = firebaseUserID;
         this.actionType = actionType;
+
     }
 
     public long getActionTime() {
@@ -66,4 +69,10 @@ public class Action implements Serializable {
     public void setFoodName(String foodName) {
         this.foodName = foodName;
     }
+
+    public void setProfilePicUrl(String Url){this.profilePicUrl = Url;}
+    public String getProfilePicUrl(){return this.profilePicUrl;}
+
+    public void setName(String name){this.name = name;}
+    public String getName(){return this.name;}
 }
