@@ -329,7 +329,7 @@ public class HomeFragment extends Fragment {
             }
         };
         // Schedule the task to run starting now and then every hour...
-        timer.schedule(hourlyTask, 01, 6*1000*60*60);
+        timer.schedule(hourlyTask, 01, 1000*60);
     }
 
     public void timerIterateFood() {
