@@ -267,4 +267,8 @@ public class FirebaseDatasource {
                     }
                 });
     }
+
+    public void removeFridgeFromUserlist(String fridgeId) {
+        mDatabase.child("users").child(mUserId).child("fridgelist").child(fridgeId).removeValue();
+    }
 }
