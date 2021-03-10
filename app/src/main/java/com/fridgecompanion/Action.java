@@ -13,6 +13,8 @@ public class Action implements Serializable {
     private String firebaseItemKey = "";
     private String actionType = "";
     private String foodName = "";
+    private String name="";
+    private String profilePicUrl="";
 
 
 
@@ -20,11 +22,13 @@ public class Action implements Serializable {
 
     }
 
-    public Action(String firebaseUserID, String firebaseItemKey, String actionType, long actionTime) {
+    public Action(String firebaseUserID, String firebaseItemKey, String actionType, long actionTime, String profilePicUrl, String name) {
         this.actionTime =actionTime;
         this.firebaseItemKey = firebaseItemKey;
         this.firebaseUserID = firebaseUserID;
         this.actionType = actionType;
+        this.profilePicUrl = profilePicUrl;
+        this.name = name;
     }
 
     public long getActionTime() {
@@ -66,4 +70,10 @@ public class Action implements Serializable {
     public void setFoodName(String foodName) {
         this.foodName = foodName;
     }
+
+    public void setProfilePicUrl(String Url){this.profilePicUrl = Url;}
+    public String getProfilePicUrl(){return this.profilePicUrl;}
+
+    public void setName(String name){this.name = name;}
+    public String getName(){return this.name;}
 }

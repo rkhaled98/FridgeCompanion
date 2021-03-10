@@ -153,7 +153,8 @@ public class FirebaseDatasource {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String key =  dataSnapshot.getRef().child("items").push().getKey();
                         dataSnapshot.getRef().child("items").child(key).setValue(food);
-                        Action addAction = new Action( mUserId, key,  "added",  Calendar.getInstance().getTimeInMillis());
+                        Action addAction = new Action( mUserId, key,  "added"
+                                ,  Calendar.getInstance().getTimeInMillis(),profilePicUrl,name);
                         addAction.setFoodName(food.getFoodName());
                         dataSnapshot.getRef().child("history").push().setValue(addAction);
                     }
@@ -172,7 +173,8 @@ public class FirebaseDatasource {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.child("items").hasChild(foodId)){
                             dataSnapshot.child("items").child(foodId).getRef().setValue(food);
-                            Action editAction = new Action( mUserId, foodId,  "edited",  Calendar.getInstance().getTimeInMillis());
+                            Action editAction = new Action( mUserId, foodId,  "edited"
+                                    ,  Calendar.getInstance().getTimeInMillis(),profilePicUrl,name);
                             editAction.setFoodName(food.getFoodName());
                             dataSnapshot.getRef().child("history").push().setValue(editAction);
                         }
@@ -189,7 +191,8 @@ public class FirebaseDatasource {
         try {
             Log.d(TAG, "attempting delete: " + food.getFirebaseKey());
             mDatabase.child("fridges").child(fridgeId).child("items").child(food.getFirebaseKey()).removeValue();
-            Action deleteAction = new Action( mUserId, food.getFirebaseKey(),  "deleted",  Calendar.getInstance().getTimeInMillis());
+            Action deleteAction = new Action( mUserId, food.getFirebaseKey(),  "deleted"
+                    ,  Calendar.getInstance().getTimeInMillis(),profilePicUrl,name);
             deleteAction.setFoodName(food.getFoodName());
             mDatabase.child("fridges").child(fridgeId).child("history").push().setValue(deleteAction);
         } catch (Exception e) {
@@ -226,9 +229,18 @@ public class FirebaseDatasource {
     }
 
     public void setUserNames(String firstName, String lastName){
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(firstName+" "+lastName).build();
-        mFirebaseUser.updateProfile(profileUpdates);
+        mDatabase.child("users").child(mUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("name").setValue(firstName+" "+lastName);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
     }
 
@@ -238,9 +250,18 @@ public class FirebaseDatasource {
 
     //Save and get profile pic url
     public void saveProfilePicToUser(String ProfilePicUrl){
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(Uri.parse(ProfilePicUrl)).build();
-        mFirebaseUser.updateProfile(profileUpdates);
+        mDatabase.child("users").child(mUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("profilePic").setValue(ProfilePicUrl);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
     public Uri getProfilePicFromUser(){
         Uri photoUrl = null;
