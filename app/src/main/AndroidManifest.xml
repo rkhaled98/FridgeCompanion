@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.Camera.autofocus" />
 
     <application
         android:name=".MainApplication"
@@ -62,8 +63,6 @@
             android:name="CLOUDINARY_URL"
             android:value="cloudinary://foreverzhang98"/>
     </application>
-
-    <uses-feature android:name="android.hardware.Camera.autofocus" />
 
 
 </manifest>
