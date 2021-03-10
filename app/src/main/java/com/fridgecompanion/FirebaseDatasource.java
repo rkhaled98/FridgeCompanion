@@ -154,7 +154,7 @@ public class FirebaseDatasource {
                         String key =  dataSnapshot.getRef().child("items").push().getKey();
                         dataSnapshot.getRef().child("items").child(key).setValue(food);
                         Action addAction = new Action( mUserId, key,  "added"
-                                ,  Calendar.getInstance().getTimeInMillis(),profilePicUrl,name);
+                                ,  Calendar.getInstance().getTimeInMillis());
                         addAction.setFoodName(food.getFoodName());
                         dataSnapshot.getRef().child("history").push().setValue(addAction);
                     }
@@ -174,7 +174,7 @@ public class FirebaseDatasource {
                         if(dataSnapshot.child("items").hasChild(foodId)){
                             dataSnapshot.child("items").child(foodId).getRef().setValue(food);
                             Action editAction = new Action( mUserId, foodId,  "edited"
-                                    ,  Calendar.getInstance().getTimeInMillis(),profilePicUrl,name);
+                                    ,  Calendar.getInstance().getTimeInMillis());
                             editAction.setFoodName(food.getFoodName());
                             dataSnapshot.getRef().child("history").push().setValue(editAction);
                         }
@@ -192,7 +192,7 @@ public class FirebaseDatasource {
             Log.d(TAG, "attempting delete: " + food.getFirebaseKey());
             mDatabase.child("fridges").child(fridgeId).child("items").child(food.getFirebaseKey()).removeValue();
             Action deleteAction = new Action( mUserId, food.getFirebaseKey(),  "deleted"
-                    ,  Calendar.getInstance().getTimeInMillis(),profilePicUrl,name);
+                    ,  Calendar.getInstance().getTimeInMillis());
             deleteAction.setFoodName(food.getFoodName());
             mDatabase.child("fridges").child(fridgeId).child("history").push().setValue(deleteAction);
         } catch (Exception e) {

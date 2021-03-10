@@ -21,14 +21,13 @@ public class Action implements Serializable {
     public Action() {
 
     }
-
-    public Action(String firebaseUserID, String firebaseItemKey, String actionType, long actionTime, String profilePicUrl, String name) {
+//Need to add name and picUrl in constructor
+    public Action(String firebaseUserID, String firebaseItemKey, String actionType, long actionTime) {
         this.actionTime =actionTime;
         this.firebaseItemKey = firebaseItemKey;
         this.firebaseUserID = firebaseUserID;
         this.actionType = actionType;
-        this.profilePicUrl = profilePicUrl;
-        this.name = name;
+
     }
 
     public long getActionTime() {
