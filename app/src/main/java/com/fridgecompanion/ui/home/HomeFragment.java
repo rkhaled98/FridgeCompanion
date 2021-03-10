@@ -65,8 +65,8 @@ public class HomeFragment extends Fragment {
     private List<Fridge> fridges;
     private List<Food> foods;
     private ImageButton viewButton;
-    private ImageButton copyLinkButton;
-    private ImageButton leaveButton;
+//    private ImageButton copyLinkButton;
+//    private ImageButton leaveButton;
     private String fridgeID;
     private String fridgeName;
 
@@ -81,9 +81,9 @@ public class HomeFragment extends Fragment {
 
         viewButton = (ImageButton) view.findViewById(R.id.view_button);
 
-        copyLinkButton = (ImageButton) view.findViewById(R.id.link_button);
+//        copyLinkButton = (ImageButton) view.findViewById(R.id.link_button);
 
-        leaveButton = (ImageButton) view.findViewById(R.id.leave_button);
+//        leaveButton = (ImageButton) view.findViewById(R.id.leave_button);
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);
 
@@ -176,21 +176,21 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            copyLinkButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (fridgeID == null || fridgeID.isEmpty()) {
-                        Toast.makeText(getActivity(), "Could not copy invite code!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("not sure what this label does", fridgeID);
-                        clipboard.setPrimaryClip(clip);
-
-                        Toast.makeText(getActivity(), "Fridge invite code copied to clipboard", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
+//            copyLinkButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (fridgeID == null || fridgeID.isEmpty()) {
+//                        Toast.makeText(getActivity(), "Could not copy invite code!", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+//                        ClipData clip = ClipData.newPlainText("not sure what this label does", fridgeID);
+//                        clipboard.setPrimaryClip(clip);
+//
+//                        Toast.makeText(getActivity(), "Fridge invite code copied to clipboard", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                }
+//            });
 
             viewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -215,13 +215,13 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            leaveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    firebaseDatasource.removeFridgeFromUserlist(fridgeID);
-                    getActivity().finish();
-                }
-            });
+//            leaveButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    firebaseDatasource.removeFridgeFromUserlist(fridgeID);
+//                    getActivity().finish();
+//                }
+//            });
         } catch (Exception e) {
 
         }

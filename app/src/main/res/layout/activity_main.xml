@@ -4,8 +4,9 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/tile_background"
    >
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
@@ -31,6 +32,144 @@
         app:navGraph="@navigation/mobile_navigation"
         android:layout_marginBottom="55dp"
         />
+
+    <ImageView
+        android:id="@+id/helper_layer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66BCBCBC"
+        android:visibility="gone"
+        android:onClick="onClickGreyScreen"/>
+
+    <LinearLayout
+        android:id="@+id/layoutFabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toTopOf="@id/layoutFabCopy"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        android:orientation="horizontal">
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/cardview_light_background"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true" >
+            <TextView
+                android:id="@+id/cvtSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Item"
+                android:paddingVertical="2dp"
+                android:paddingHorizontal="5dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_24"
+            app:backgroundTint="@android:color/holo_green_light"
+            app:fabSize="mini"
+            android:onClick="onClickSave"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layoutFabCopy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toTopOf="@id/layoutFabDelete"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        android:orientation="horizontal">
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/cardview_light_background"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true" >
+            <TextView
+                android:id="@+id/cvtCopy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Copy Invite Link"
+                android:paddingVertical="2dp"
+                android:paddingHorizontal="5dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_content_copy_24"
+            app:backgroundTint="@android:color/holo_orange_light"
+            app:fabSize="mini"
+            android:onClick="onClickCopy"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layoutFabDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toTopOf="@id/fab"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="invisible"
+        android:orientation="horizontal"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/cardview_light_background"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true" >
+            <TextView
+                android:id="@+id/cvtDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Leave Fridge"
+                android:paddingVertical="2dp"
+                android:paddingHorizontal="5dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_exit_to_app_24"
+            app:backgroundTint="@android:color/holo_red_light"
+            app:fabSize="mini"
+            android:onClick="onClickDelete"/>
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
