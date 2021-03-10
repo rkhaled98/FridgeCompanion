@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
@@ -68,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 //            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(navView, navController);
+            navView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+                @Override
+                public void onNavigationItemReselected(@NonNull MenuItem item) {
+                    // Nothing here to disable reselect
+                }
+            });
 
             layoutFabSave = (LinearLayout)findViewById(R.id.layoutFabSave);
             layoutFabCopy = (LinearLayout)findViewById(R.id.layoutFabCopy);
