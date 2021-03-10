@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout layoutFabSave;
     private LinearLayout layoutFabCopy;
     private LinearLayout layoutFabDelete;
+    ImageView helperlayer;
     FloatingActionButton fab;
     private Boolean fabOpened = false;
 
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             layoutFabSave = (LinearLayout)findViewById(R.id.layoutFabSave);
             layoutFabCopy = (LinearLayout)findViewById(R.id.layoutFabCopy);
             layoutFabDelete = (LinearLayout)findViewById(R.id.layoutFabDelete);
+            helperlayer = (ImageView) findViewById(R.id.helper_layer);
 
             fab = findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         layoutFabSave.setVisibility(View.INVISIBLE);
         layoutFabCopy.setVisibility(View.INVISIBLE);
         layoutFabDelete.setVisibility(View.INVISIBLE);
+        helperlayer.setVisibility(View.INVISIBLE);
         fab.setImageResource(R.drawable.ic_baseline_fastfood_24);
         fabOpened = false;
     }
@@ -117,8 +121,13 @@ public class MainActivity extends AppCompatActivity {
         layoutFabSave.setVisibility(View.VISIBLE);
         layoutFabCopy.setVisibility(View.VISIBLE);
         layoutFabDelete.setVisibility(View.VISIBLE);
+        helperlayer.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_baseline_close_24);
         fabOpened = true;
+    }
+
+    public void onClickGreyScreen(View view){
+        closeSubMenusFab();
     }
 
 
