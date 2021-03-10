@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.fridgecompanion.ui.home.FoodAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -263,15 +265,10 @@ public class FirebaseDatasource {
                     }
                 });
     }
-    public Uri getProfilePicFromUser(){
-        Uri photoUrl = null;
-        if(mFirebaseUser!=null){
-            for(UserInfo profile : mFirebaseUser.getProviderData()){
-                photoUrl = profile.getPhotoUrl();
-            }
-        }
-        return photoUrl;
+    public DatabaseReference getProfilePicUrlReference(){
+        return mDatabase.child("users").child(mUserId).child("profilePic");
     }
+
 
     public void saveUserProfileInfo(String userName, String photoURL){
         mDatabase.child("users").child(mUserId)
