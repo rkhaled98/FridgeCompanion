@@ -56,7 +56,6 @@ public class AfterSignInActivity extends AppCompatActivity {
         fridgeNameEdit = (EditText)findViewById(R.id.fridge_name_edit);
         fridgeCodeEdit = (EditText)findViewById(R.id.fridge_code_edit);
 
-
         getWindow().setNavigationBarColor(ResourcesCompat.getColor(getResources(), R.color.fridge_blue, null));
         intent = new Intent(this, MainActivity.class);
 

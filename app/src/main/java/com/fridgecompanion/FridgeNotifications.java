@@ -8,14 +8,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.navigation.NavDeepLinkBuilder;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
 import com.fridgecompanion.ui.history.HistoryFragment;
+import com.fridgecompanion.ui.home.HomeFragment;
 
 /**
  * Class: FridgeNotifications
@@ -24,7 +27,7 @@ import com.fridgecompanion.ui.history.HistoryFragment;
 public class FridgeNotifications {
 
     public static NotificationManager notificationManager;
-    public static final String CHANNEL_ID = "notification channel";
+    public static final String CHANNEL_ID = "Notification";
     public static final int MSG_INVENTORY_LOW = 1;
     public static final int MSG_EXPIRING_SOON = 2;
     public static final int NOTIFY_ID = 101;
@@ -33,12 +36,19 @@ public class FridgeNotifications {
      * Method: showNotification
      * Notes: Method to display notification to user based on the msg type specified
      */
-    public static void showNotification(Context context, int msg_type, Food foodItem, String fridgeName) {
+    public static void showNotification(Context context, int msg_type, Food foodItem, String fridgeName, String fridgeKey) {
         notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent intent = new Intent(context, HistoryFragment.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent intent = new Intent(context, AfterSignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        Bundle b = new Bundle();
+        b.putString("FRIDGE_NAME", fridgeName);
+        b.putString("FRIDGE_KEY", fridgeKey);
+        intent.putExtras(b);
+
+        //PendingIntent pendingIntent = new NavDeepLinkBuilder(context).setGraph(R.navigation.mobile_navigation)
+          //      .setDestination(R.id.navigation_home).setArguments(b).createPendingIntent();
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID);
         notificationBuilder.setContentTitle("Fridge Companion");
@@ -52,7 +62,7 @@ public class FridgeNotifications {
         notificationBuilder.setContentIntent(pendingIntent);
         notificationBuilder.setSmallIcon(R.drawable.common_google_signin_btn_icon_dark);
         Notification notification = notificationBuilder.build();
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
         if(Build.VERSION.SDK_INT > 26) {
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "channel name",
