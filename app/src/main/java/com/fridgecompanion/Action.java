@@ -12,9 +12,9 @@ public class Action implements Serializable {
     private String firebaseUserID = "";
     private String firebaseItemKey = "";
     private String actionType = "";
-    private String foodName = "";
-    private String name="";
-    private String profilePicUrl="";
+    private String foodName="";
+    private String photoURL;
+    private String userName;
 
 
 
@@ -70,9 +70,20 @@ public class Action implements Serializable {
         this.foodName = foodName;
     }
 
-    public void setProfilePicUrl(String Url){this.profilePicUrl = Url;}
-    public String getProfilePicUrl(){return this.profilePicUrl;}
+    public String getPhotoURL() {
+        return photoURL;
+    }
 
-    public void setName(String name){this.name = name;}
-    public String getName(){return this.name;}
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
 }

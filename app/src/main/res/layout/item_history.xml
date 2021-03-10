@@ -17,7 +17,7 @@
         android:layout_margin="10dp"
        >
         <ImageView
-            android:id="@+id/back_button"
+            android:id="@+id/profile_img"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="fitXY"

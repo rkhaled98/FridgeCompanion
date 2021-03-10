@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fridgecompanion.Action;
 import com.fridgecompanion.Food;
 import com.fridgecompanion.R;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -66,12 +68,14 @@ public class HistoryListAdapter extends ArrayAdapter<Action> {
 
         TextView firstRow = (TextView) view.findViewById(R.id.item_text);
         TextView secondRow = (TextView) view.findViewById(R.id.date_text);
+        ImageView imgView = (ImageView) view.findViewById(R.id.profile_img);
 
         // Load the text into the text view
         long millisecond = actionList.get(position).getActionTime();
         String date = new SimpleDateFormat("MM/dd HH:mm").format(new Date(millisecond));
-        firstRow.setText("User "+action.getActionType()+ " "+ action.getFoodName() + " to fridge");
+        firstRow.setText(String.format("%s %s %s to fridge", action.getUserName(), action.getActionType(), action.getFoodName()));
         secondRow.setText(date);
+        Picasso.get().load(action.getPhotoURL()).into(imgView);
 
         return view;
     }
