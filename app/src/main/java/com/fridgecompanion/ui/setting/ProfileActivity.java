@@ -31,6 +31,8 @@ import com.fridgecompanion.FirebaseDatasource;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.soundcloud.android.crop.Crop;
 
 import com.fridgecompanion.R;
@@ -64,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
     };
     private static final int OPTIONS_TAKE_PHOTO = 0;
     private static final int OPTIONS_FROM_GALLERY = 1;
+    EditText last;
+    EditText first;
 
     //For cloud storage
     private String ProfilePicUrl;
@@ -83,6 +87,31 @@ public class ProfileActivity extends AppCompatActivity {
                 displayCameraOptions(view);
             }
         });
+        first = (EditText) findViewById(R.id.first_name_text_id);
+        last = (EditText) findViewById(R.id.last_name_text_id);
+
+        try {
+            FirebaseDatasource firebaseDatasource = new FirebaseDatasource(getApplicationContext());
+            firebaseDatasource.getUserReference().child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        String[] strings = dataSnapshot.getValue(String.class).split("\\s+");
+                        if(strings.length == 2){
+                            first.setText(strings[0]);
+                            last.setText(strings[1]);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -312,11 +341,7 @@ public class ProfileActivity extends AppCompatActivity {
         isTakenFromCamera = false;
     }
     //Save names
-    public void saveUserName(){
-        EditText last = (EditText) findViewById(R.id.last_name_text_id);
-        String last_name = last.getText().toString();
-        EditText first = (EditText) findViewById(R.id.first_name_text_id);
-        String first_name = first.getText().toString();
+    public void saveUserName(String first_name, String last_name){
         FirebaseDatasource firebaseDatasource = null;
         try {
             firebaseDatasource = new FirebaseDatasource(getApplicationContext());
@@ -324,13 +349,19 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         firebaseDatasource.setUserNames(first_name,last_name);
+
     }
     public void onProfileSaveButtonClicked(View view) {
-        saveProfilePicture();
-        saveUserName();
-
-        Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
-        finish();
+        String last_name = last.getText().toString();
+        String first_name = first.getText().toString();
+        if(!first_name.trim().isEmpty() && !last_name.trim().isEmpty()){
+            saveProfilePicture();
+            saveUserName(first_name, last_name);
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+            finish();
+        }else{
+            Toast.makeText(this, "Missing Names", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onProfileCancelButtonClicked(View view) {

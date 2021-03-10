@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    app:titleTextColor="@color/fridge_blue"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
+    >
+    <com.fridgecompanion.myPreference
+        android:layout="@layout/layout_settings_top"
+        android:key="custom_pref"
+        android:title="customPref"
+        android:defaultValue="false"/>
     <PreferenceCategory
         android:addStatesFromChildren="false"
         app:iconSpaceReserved="false"
@@ -11,9 +15,9 @@
         android:title="@string/account_preferences">
 
         <PreferenceScreen
+            app:iconSpaceReserved="false"
             android:key="user_profile"
             android:title="@string/user_profile_title"
-            app:iconSpaceReserved="false"
             android:summary="@string/user_profile_summary">
 
             <intent

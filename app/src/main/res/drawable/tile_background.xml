@@ -3,4 +3,5 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:src="@drawable/background"
     android:tileMode="repeat"
+    android:tileModeX="repeat"
     />
