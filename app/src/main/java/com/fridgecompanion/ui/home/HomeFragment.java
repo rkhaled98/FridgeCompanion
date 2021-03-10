@@ -64,6 +64,7 @@ public class HomeFragment extends Fragment {
     private List<Food> foods;
     private ImageButton viewButton;
     private ImageButton copyLinkButton;
+    private ImageButton leaveButton;
     private String fridgeID;
     private String fridgeName;
 
@@ -79,6 +80,8 @@ public class HomeFragment extends Fragment {
         viewButton = (ImageButton) view.findViewById(R.id.view_button);
 
         copyLinkButton = (ImageButton) view.findViewById(R.id.link_button);
+
+        leaveButton = (ImageButton) view.findViewById(R.id.leave_button);
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);
 
@@ -101,8 +104,9 @@ public class HomeFragment extends Fragment {
             TextView tv = (TextView)view.findViewById(R.id.fridge_name_text);
             tv.setText(b.getString("FRIDGE_NAME"));
             fridgeName = b.getString("FRIDGE_NAME");
+            Log.d("test", fridgeID);
         }
-        Log.d("test", fridgeID);
+
 
         try {
             firebaseDatasource = new FirebaseDatasource(getContext());
@@ -209,9 +213,18 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            leaveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseDatasource.removeFridgeFromUserlist(fridgeID);
+                    getActivity().finish();
+                }
+            });
         } catch (Exception e) {
 
         }
+
+
 
         startNotificationTimer();
         return view;
@@ -314,7 +327,7 @@ public class HomeFragment extends Fragment {
             }
         };
         // Schedule the task to run starting now and then every hour...
-        timer.schedule(hourlyTask, 01, 1000*60*60); // TODO: change to 1000*60*60 after all testing
+        timer.schedule(hourlyTask, 01, 1000*10); // TODO: change to 1000*60*60 after all testing
     }
 
     public void timerIterateFood() {
@@ -355,7 +368,7 @@ public class HomeFragment extends Fragment {
             // Check hit
             if (Math.abs(difference) < days) {
                 // Fire notification
-                FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON, foodItem, fridgeName);
+                FridgeNotifications.showNotification(getContext(), FridgeNotifications.MSG_EXPIRING_SOON, foodItem, fridgeName, fridgeID);
                 foodItem.setNeedsNotification(false);
                 firebaseDatasource.editItemToFridgeId(foodItem, foodItem.getFirebaseFridgeId(), foodItem.getFirebaseKey());
                 Log.d(TAG, "SENT NOTIFICATION");

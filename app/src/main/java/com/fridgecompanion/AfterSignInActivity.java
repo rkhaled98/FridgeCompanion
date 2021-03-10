@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,7 +55,6 @@ public class AfterSignInActivity extends AppCompatActivity {
         ll = (LinearLayout)findViewById(R.id.select_fridge_container);
         fridgeNameEdit = (EditText)findViewById(R.id.fridge_name_edit);
         fridgeCodeEdit = (EditText)findViewById(R.id.fridge_code_edit);
-
 
         getWindow().setNavigationBarColor(ResourcesCompat.getColor(getResources(), R.color.fridge_blue, null));
         intent = new Intent(this, MainActivity.class);
@@ -94,6 +94,48 @@ public class AfterSignInActivity extends AppCompatActivity {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                    try {
+                        String fridgeId = snapshot.getKey();
+
+                        // first find the index to remove based on key
+                        int indexToRemove = 0;
+                        for (Map.Entry<Integer, String> entry: fridgeIds.entrySet()){
+                            Integer index = entry.getKey();
+                            String key = entry.getValue();
+
+                            if (key.equals(fridgeId)) {
+                                indexToRemove = index;
+                                break;
+                            }
+                        }
+
+                        fridgeNames.remove(indexToRemove);
+
+                        // need to create new hashmap
+                        HashMap<Integer, String> newFridgeIds = new HashMap<Integer, String>();
+
+                        for (Map.Entry<Integer, String> entry: fridgeIds.entrySet()){
+                            Integer index = entry.getKey();
+                            String key = entry.getValue();
+
+                            if (index > indexToRemove) {
+                                newFridgeIds.put(index-1, key);
+                            } else if (index < indexToRemove) {
+                                newFridgeIds.put(index, key);
+                            }
+                        }
+
+                        fridgeIds = newFridgeIds;
+
+                        optionAdapter.notifyDataSetChanged();
+
+                        int delta = getResources().getDimensionPixelSize(R.dimen.fridge_list_height);
+                        int height = getResources().getDimensionPixelSize(R.dimen.fridge_list_default_height) + fridgeNames.size()*delta;
+                        ll.getLayoutParams().height = height;
+                        ll.requestLayout();
+                    } catch (Exception e) {
+//                        Toast.makeText(this, "could not remove fridge!", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
 

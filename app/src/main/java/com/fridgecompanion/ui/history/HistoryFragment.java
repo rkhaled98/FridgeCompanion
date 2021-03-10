@@ -95,6 +95,9 @@ public class HistoryFragment extends Fragment{
                             if(dataSnapshot.exists()) {
                                 action.setUserName(dataSnapshot.child("name").getValue(String.class));
                                 action.setPhotoURL(dataSnapshot.child("profilePic").getValue(String.class));
+                                if(actionList.size()==20){
+                                    actionList.pop();
+                                }
                                 if (!action.getActionType().equals("deleted")){
                                     Log.d("test", " otuside");
                                     firebaseDatasource.getItemsReferenceByFridgeId(fridgeID).child(action.getFirebaseItemKey()).addValueEventListener(new ValueEventListener() {
