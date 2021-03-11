@@ -1,6 +1,7 @@
 package com.fridgecompanion;
 
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -59,7 +60,6 @@ public class Food implements Serializable {
 
     private void setDefaultValues() {
 
-        //https://www.edamam.com/food-img/63f/63fefaf1b9dc3674e7b105a3d91b2ba0.png
         image = "https://i.pinimg.com/originals/60/ed/ab/60edabe557e8139d52dae12f380205dc.png";
         quantity = 0;
         unit = UNIT_COUNT;
@@ -192,7 +192,13 @@ public class Food implements Serializable {
     }
 
     public String getDaysFromExpirationString(long currentTime){
-        int difference= ((int)((expireDate/(24*60*60*1000)) -(int)(currentTime/(24*60*60*1000))));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(currentTime);
+        int current = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.setTimeInMillis(expireDate);
+        int expire = calendar.get(Calendar.DAY_OF_MONTH);
+        int difference = expire - current;
+
         if (difference > 1){
             return difference+ " days";
         }else if (difference == 1) {
@@ -203,7 +209,12 @@ public class Food implements Serializable {
     }
 
     public int getDaysFromExpiration(long currentTime){
-        return ((int)((expireDate/(24*60*60*1000)) -(int)(currentTime/(24*60*60*1000))));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(currentTime);
+        int current = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.setTimeInMillis(expireDate);
+        int expire = calendar.get(Calendar.DAY_OF_MONTH);
+        return expire - current;
     }
 
     public boolean getNeedsNotification() {
