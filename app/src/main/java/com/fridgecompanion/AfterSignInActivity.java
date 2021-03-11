@@ -137,7 +137,6 @@ public class AfterSignInActivity extends AppCompatActivity {
                         ll.getLayoutParams().height = height;
                         ll.requestLayout();
                     } catch (Exception e) {
-//                        Toast.makeText(this, "could not remove fridge!", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -162,8 +161,6 @@ public class AfterSignInActivity extends AppCompatActivity {
 
 
     public void onClickNewFridgeButton(View view){
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
         String fridgeName = fridgeNameEdit.getText().toString().trim();
         if(fridgeName.isEmpty()){
             Toast.makeText(this, "Need a Title!", Toast.LENGTH_SHORT).show();
@@ -213,12 +210,6 @@ public class AfterSignInActivity extends AppCompatActivity {
 
                     }
                 });
-//                Bundle b = new Bundle();
-//                b.putString("FRIDGE_KEY", fridgeCode);
-//                b.putString("FRIDGE_NAME", fridgeNameFromCode);
-//                Intent intent = new Intent(this, MainActivity.class);
-//                intent.putExtras(b);
-//                startActivity(intent);
             } catch (Exception e) {}
         }
     }

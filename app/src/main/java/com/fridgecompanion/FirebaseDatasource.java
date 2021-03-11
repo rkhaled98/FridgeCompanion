@@ -51,37 +51,6 @@ public class FirebaseDatasource {
             throw new Exception("no user logged in");
         } else {
             mUserId = mFirebaseUser.getUid();
-
-
-//            FirebaseListOptions<Fridge> options = new FirebaseListOptions.Builder<Fridge>()
-//                    .setLayout(R.layout.layout_fridge_item)
-//                    .setQuery(mDatabase.child("users").child(mUserId).child("fridges"), Fridge.class)
-//                    .build();
-//
-//            Log.d(TAG, mUserId);
-//
-//            Log.d(TAG, "about to populate");
-//
-//            myAdapter = new FirebaseListAdapter<Fridge>(options) {
-//                @Override
-//                protected void populateView(@NonNull View view, Fridge model, int position) {
-////                if (view == null) {
-////                    final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-////                    view = layoutInflater.inflate(resourceLayout, null);
-////                }
-//                    Log.d(TAG, "populating");
-//
-//                    final ListView listViewOfFood = (ListView) view.findViewById(R.id.listViewFood);
-//                    final List<Food> foodList = model.getItems();
-//
-//                    Log.d(TAG, foodList.toString());
-//
-//                    FoodAdapter adapter = new FoodAdapter(context, R.layout.layout_food_item, foodList);
-//                    listViewOfFood.setAdapter(adapter);
-//
-//
-//                }
-//            };
         }
     }
 
@@ -107,7 +76,6 @@ public class FirebaseDatasource {
 
                     }
                 });
-//        mDatabase.child("users").child(mUserId).child("items").push().setValue(item);
     }
 
     public String createFridge(Fridge fridge) {
@@ -199,19 +167,6 @@ public class FirebaseDatasource {
             mDatabase.child("fridges").child(fridgeId).child("history").push().setValue(deleteAction);
         } catch (Exception e) {
         }
-
-//        mDatabase.child("fridges").child(fridgeId)
-//                .addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        dataSnapshot.getRef().child("items").push().setValue(food);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
     }
 
     public void addActionByFridgeId(Action action, String fridgeId){

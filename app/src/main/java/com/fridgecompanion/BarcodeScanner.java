@@ -65,12 +65,6 @@ public class BarcodeScanner extends AppCompatActivity implements ZXingScannerVie
             public void onResponse(Call call, Response response) throws IOException {
                 item = EdamamService.processResults(response);
                 try {
-
-//                    Food food = new Food();
-//                    food.setFoodName(item.getFoodName());
-//                    food.setCalories(item.getCalories());
-//                    food.setImage(item.getImage());
-//                    food.setNutrition(item.getNutrition());
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(ItemEntryActivity.FOODNAME,item.getFoodName());
                     returnIntent.putExtra(ItemEntryActivity.CALORIES,item.getCalories());
